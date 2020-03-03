@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 18:43:22 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 02:23:18 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 05:22:50 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int		key_pressed(int key_code, void *p)
 {
 	g_is_keypressed = 1;
 	(void)p;
-	if (key_code == UP_ARROW)
+	if (key_code == EXIT_KEY)
+		exit(UNCOMPLETED);
+	else if (key_code == UP_ARROW)
 		g_world.player.walkDirection = 1;
 	else if (key_code == DOWN_ARROW)
 		g_world.player.walkDirection = -1;
@@ -24,7 +26,6 @@ int		key_pressed(int key_code, void *p)
 		g_world.player.turnDirection = 1;
 	else if (key_code == LEFT_ARROW)
 		g_world.player.turnDirection = -1;
-	update_field_of_view();
 	return (1);
 }
 

@@ -6,11 +6,11 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 08:21:56 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 04:31:51 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:38:48 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 size_t	ft_strlen(const char *str)
 {

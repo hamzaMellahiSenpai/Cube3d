@@ -6,11 +6,11 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:33:35 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 03:00:15 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:38:33 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 void	update_player(void)
 {
@@ -39,4 +39,14 @@ int		walls_at(t_vector coordinate)
 	map_grid_index_x = coordinate.x / g_world.grid_size.width;
 	map_grid_index_y = coordinate.y / g_world.grid_size.height;
 	return (g_game_map[map_grid_index_y][map_grid_index_x] == '1');
+}
+
+
+int		is_out_of_map(t_vector A)
+{
+	int height = g_world.rows * g_world.grid_size.height;
+  	int width = g_world.cols * g_world.grid_size.width;
+	if (A.x <= width && A.y <= height && A.x >= 0 && A.y >= 0)
+		return (0);
+	return (1);
 }

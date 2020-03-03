@@ -6,11 +6,11 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 15:35:21 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 03:00:30 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:37:09 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 int		ft_atoi(const char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 13:55:39 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/02 06:52:53 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 06:20:18 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,21 @@ t_image   load_image(t_pair *content)
 	return (g_textures[index]);
 }
 
-void    read_texture(t_string line, int index)
+void    read_image(t_string line, int index)
 {
 	t_string path;
 	if (g_infos[index])
 		return (handle_error(DUPLICATE_TEXTURE, FAIL));
 	//printf("%s\n", line);
-	path = ft_strjoin(line + ((index == 4) ? 2 : 3) + 2, ".xpm", 3);
+	path = ft_strjoin("assets/sprites/", ft_strjoin(line + 5, ".xpm", 3), 3);
 	//load_image(index, path);
 	//printf("%s | %d", path, index);
 	t_pair *p = make_pair(&index, &path);
-	printf("%d || %s\n", (*(int*)p->a), (t_string)p->b);
-	push_back(&(g_world.images),  new_lst(make_pair(&index, &path)));
+	//printf("%d || %s\n", (*(int*)p->a), (t_string)p->b);
+	printf("has been loaded %s\n", path);
+	if (index == 4)
+		g_world.sprites[0].path = path;
+	//push_back(&(g_world.images),  new_lst(make_pair(&index, &path)));
 	g_infos[index]++;
 }
 
@@ -66,15 +69,15 @@ void    check_for_info(t_string line)
 	if (*line == 'R')
 		read_resolution(line);
 	else if (line[0] == 'N')
-		read_texture(line, north_texture);
+		read_image(line, north_texture);
 	else if (line[0] == 'S' && line[1] == 'O')
-		read_texture(line, south_texture);
+		read_image(line, south_texture);
 	else if (line[0] == 'W')
-		read_texture(line, east_texture);
+		read_image(line, east_texture);
 	else if (line[0] == 'E')
-		read_texture(line, west_texture);
+		read_image(line, west_texture);
 	else if (line[0] == 'S')
-		read_texture(line, sprite_texture);
+		read_image(line, sprite_texture);
 	else if (line[0] == 'F')
 		read_color(line, floor_color, ground);
 	else if (line[0] == 'C')

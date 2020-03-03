@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 23:34:12 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 03:35:45 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 06:05:57 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void			update_field_of_view(void)
 {
 	t_ray		ray;
 	int			col;
-	t_ray		rays[(int)g_screen.width];
 	float		ray_angle;
 	float		step;
 
@@ -36,7 +35,7 @@ void			update_field_of_view(void)
 	{
 		ray.angle = norm_angle(ray_angle);
 		cast(&ray, col);
-		rays[col] = ray;
+		g_world.wall_rays[col] = ray;
 		ray_angle += step;
 		col++;
 	}

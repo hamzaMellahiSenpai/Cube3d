@@ -6,11 +6,11 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 03:10:00 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/01 04:08:43 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:37:56 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 void	draw_traingle(t_vector *a, t_vector *b, t_vector *c, int color)
 {

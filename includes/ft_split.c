@@ -6,11 +6,11 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 05:08:58 by hmellahi          #+#    #+#             */
-/*   Updated: 2019/12/22 16:28:47 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:36:25 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 static	int			wordscount(const char *s, char c)
 {

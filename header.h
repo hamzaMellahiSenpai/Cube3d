@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/02 05:42:43 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 08:27:11 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,22 @@
 # include <stdio.h>
 # include <time.h>
 # include <unistd.h>
-
+ #include <fcntl.h>
 # define RIGHT_ARROW 124
 # define LEFT_ARROW 123
 # define UP_ARROW 126
 # define DOWN_ARROW 125
+# define EXIT_KEY 53
 # define VIEW_ANGLE (float)1.0472
 # define WALL 1
 # define PP g_world.player.position
 # define WALKDIRECTION g_world.player.walkDirection
 # define TURNDIRECTION g_world.player.turnDirection
 # define PROTATIONSPEED g_world.player.rotation.speed
+# define PLAYERPOS g_world.player.position
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
-# define BLOCK_SIZE 64
+# define BLOCK_SIZE 70
 # define MINI_MAP_SCALE 1
 
 enum							e_states
@@ -78,6 +80,8 @@ enum							e_vectors_states
 	VEC_TO_NUM,
 	NUM_TO_VEC
 };
+
+typedef char*			t_string;
 
 typedef	struct		s_vector
 {
@@ -156,7 +160,8 @@ typedef struct		s_sprite
 {
 	t_image		img;
 	float			distance;
-	t_vector	position;
+	t_vector	pos;
+	t_string	path;
 }									t_sprite;
 
 typedef struct		s_world
@@ -167,10 +172,10 @@ typedef struct		s_world
 	t_player			player;
 	int						sky_box_color;
 	int						ground_color;
-	t_vector			object_position;
-	t_sprite			*sprites;
-	t_lst						*images;
+	t_sprite			sprites[100];
+	//t_lst						*sprites;
 	int					colors[2];
+	t_ray				*wall_rays;
 }									t_world;
 
 typedef	struct		s_texture
@@ -187,7 +192,6 @@ typedef	struct		s_time
 	float		delta_time;
 }									t_time;
 
-typedef char*			t_string;
 
 void							*g_mlx;
 void							*g_window;
@@ -202,7 +206,7 @@ int							g_bc[2];
 /*
 ================= Vectors Functions ===================
 */
-
+void	check_for_file(t_string file_name);
 t_vector		new_vector(float x, float y);
 t_shape			new_shape(float x, float y);
 t_vector		add_vectors(void *a, void *b);
@@ -213,6 +217,10 @@ float			vector_len(t_vector vec);
 void			add_to_vector(void *a, void *b, char type);
 t_vector		mult_vectors(void *a, void *b, int type);
 t_shape			to_shape(t_vector a);
+void	direct_line(int x, int start, int end, int color);
+void	render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
+void	render_sprite(t_sprite sprite, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
+float			dist(t_vector a, t_vector b);
 /*
 =======================================================
 */
@@ -271,5 +279,7 @@ t_pair			*make_pair(void *a, void *b);
 void	lstiter(t_lst *lst, void *(*f)(void *content));
 void			push_front(t_lst** head_ref, t_lst* new);
 t_image   load_image(t_pair *content);
+int		is_out_of_map(t_vector A);
+int		shadow(int color, double distance);
 /*=========================================================*/
 #endif

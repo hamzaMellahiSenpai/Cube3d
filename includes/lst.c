@@ -6,18 +6,18 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 00:30:02 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/02 06:54:19 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 04:38:45 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 void	push_back(t_lst **alst, t_lst *new)
 {
 	t_lst	*ptr;
 
 	if (!*alst)
-		return push_front(alst, new);
+		return (push_front(alst, new));
 	ptr = *alst;
 	while (ptr->next)
 		ptr = ptr->next;
@@ -41,7 +41,7 @@ t_lst	*new_lst(void *content)
 	return (newlist);
 }
 
-void deleteList(t_lst** head_ref)  
+void deleteList(t_lst** head_ref)
 {  
 	t_lst* current;
 	t_lst* next;

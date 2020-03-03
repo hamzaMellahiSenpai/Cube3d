@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 03:13:31 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/02 00:57:57 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/03 05:03:00 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,11 @@ void		background(int color)
 		while (j < g_screen.width)
 			put_pixel(new_vector(j++, i), color);
 	}
+}
+
+
+void	direct_line(int x, int start, int end, int color)
+{
+	while (++start <= end)
+		put_pixel(new_vector(x,start), color);
 }
