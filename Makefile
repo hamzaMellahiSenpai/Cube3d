@@ -14,8 +14,8 @@ FLAGS =  -Wall -Wextra -Werror
 ARG = -c
 SRC = maths.c player.c vector.c main.c
 CC  = @gcc
-MLX = -lmlx -framework OpenGL -framework AppKit -g
-#MLX = -L/usr/X11/lib /usr/X11/lib/libmlx.a -lXext -lX11 -lm
+#MLX = -lmlx -framework OpenGL -framework AppKit -g
+MLX = -L/usr/X11/lib /usr/X11/lib/libmlx.a -lXext -lX11 -lm
 all:
 	#$(CC) $(ARG) $(SRC) $(MLX)
 	#@gcc -g rendering.c lst.c effects.c events_handler.c ui.c shapes.c main.c maths.c player.c vector.c ray.c Read_file.c ft_split.c func_utils.c func_utils2.c get_next_line.c errors.c -D BUFFER_SIZE=1 $(MLX) -fsanitize=address

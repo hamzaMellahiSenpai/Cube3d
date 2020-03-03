@@ -25,12 +25,15 @@
 # define UP_ARROW 126
 # define DOWN_ARROW 125
 # define EXIT_KEY 53
+# define SWIDTH g_screen.width
+# define SHEIGHT g_screen.height
 # define VIEW_ANGLE (float)1.0472
 # define WALL 1
 # define PP g_world.player.position
 # define WALKDIRECTION g_world.player.walkDirection
 # define TURNDIRECTION g_world.player.turnDirection
 # define PROTATIONSPEED g_world.player.rotation.speed
+# define PROTATIONANGLE g_world.player.rotation.angle
 # define PLAYERPOS g_world.player.position
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
@@ -159,9 +162,10 @@ typedef struct		s_image
 typedef struct		s_sprite
 {
 	t_image		img;
-	float			distance;
+	float		distance;
 	t_vector	pos;
 	t_string	path;
+	float		size;
 }									t_sprite;
 
 typedef struct		s_world
@@ -217,9 +221,9 @@ float			vector_len(t_vector vec);
 void			add_to_vector(void *a, void *b, char type);
 t_vector		mult_vectors(void *a, void *b, int type);
 t_shape			to_shape(t_vector a);
-void	direct_line(int x, int start, int end, int color);
-void	render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
-void	render_sprite(t_sprite sprite, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
+void			direct_line(int x, int start, int end, int color);
+void			render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
+void			render_sprite(t_sprite sprite);
 float			dist(t_vector a, t_vector b);
 /*
 =======================================================

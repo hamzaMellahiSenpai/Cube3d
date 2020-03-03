@@ -37,9 +37,9 @@ void	render3D(t_ray ray, int col, t_vector Wall_hit, int is_hor_hit)
 	}
     //direct_line(col, sky_height, sky_height + WALL_HEIGHT, shadow(0xffffff, distanceFromRay));
 	render_texture(texture, WALL_HEIGHT, col, Wall_hit, is_hor_hit, distanceFromRay);
-	float sprite_distance = dist(g_world.sprites[0].pos, PLAYERPOS);
-	if (sprite_distance < ray.distance)
-		render_sprite(g_world.sprites[0], WALL_HEIGHT, col, Wall_hit, is_hor_hit, distanceFromRay);
+	//float sprite_distance = dist(g_world.sprites[0].pos, PLAYERPOS);
+	//if (sprite_distance < ray.distance)
+		//render_sprite(g_world.sprites[0], WALL_HEIGHT, col, Wall_hit, is_hor_hit, distanceFromRay);
 }
 
 void	render(t_ray ray, t_vector A)
@@ -77,9 +77,9 @@ void	render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit
 	}
 }
 
-
-void	render_sprite(t_sprite sprite, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance)
+void	render_sprite(t_sprite sprite)
 {
+/*
 	float	offset;
 	float	step;
 	float	yoffset;
@@ -98,4 +98,5 @@ void	render_sprite(t_sprite sprite, int WALL_HEIGHT, int col, t_vector Wall_hit,
 		put_pixel(new_vector(col, y) , pixel);
 		y++;
 	}
+*/
 }

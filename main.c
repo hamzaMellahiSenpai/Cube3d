@@ -105,6 +105,7 @@ void    setup()
 	g_world.sprites[0].img.img = mlx_xpm_file_to_image(g_mlx, "assets/sprites/barrel.xpm", &g_world.sprites[0].img.width, &g_world.sprites[0].img.height);
 	g_world.sprites[0].img.data = (int *)mlx_get_data_addr(g_world.sprites[0].img.img, &g_world.sprites[0].img.bits_per_pixel, &g_world.sprites[0].img.bits_per_pixel, &g_world.sprites[0].img.endian);
 	//load_assets();
+	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
 	draw_map();
 }
 
