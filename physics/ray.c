@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 15:33:22 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 05:11:06 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/05 00:36:02 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,28 +110,6 @@ void	cast(t_ray *a, int col)
 	ray.distance = dist(A, g_world.player.position);
 	*a = ray;
 	render3D(ray, col, A, is_hor_hit);
-}
-
-void	sort_sprites(t_sprite **sprites, int n)
-{
-	int i;
-	int j;
-	t_sprite tmp;
-
-	i = -1;
-	while (i++ < n - 1)
-	{
-		j = -1;
-		while (j++ < n)
-		{
-			if ((*sprites[j]).distance > (*sprites[j + 1]).distance)
-			{
-				tmp = *sprites[j];
-				*sprites[j] = *sprites[j+1];
-				*sprites[j+1] = tmp;
-			}
-		}
-	}
 }
 
 void	draw_sprites()

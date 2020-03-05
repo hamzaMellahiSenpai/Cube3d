@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 08:27:11 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/05 03:58:45 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 # define UP_ARROW 126
 # define DOWN_ARROW 125
 # define EXIT_KEY 53
+# define W_KEY 13
+# define A_KEY 0
+# define D_KEY 2
+# define S_KEY 1
 # define SWIDTH g_screen.width
 # define SHEIGHT g_screen.height
 # define VIEW_ANGLE (float)1.0472
@@ -37,8 +41,9 @@
 # define PLAYERPOS g_world.player.position
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
-# define BLOCK_SIZE 70
+# define BLOCK_SIZE 64
 # define MINI_MAP_SCALE 1
+# define DEG(x) x * 180 / M_PI
 
 enum							e_states
 {
@@ -134,6 +139,7 @@ typedef struct		s_player
 	float					health;
 	int						walkDirection;
 	int						turnDirection;
+	int					offset;
 }									t_player;
 
 typedef struct		s_ray
@@ -166,6 +172,8 @@ typedef struct		s_sprite
 	t_vector	pos;
 	t_string	path;
 	float		size;
+	int			s_x;
+	int			s_y;
 }									t_sprite;
 
 typedef struct		s_world
@@ -285,5 +293,9 @@ void			push_front(t_lst** head_ref, t_lst* new);
 t_image   load_image(t_pair *content);
 int		is_out_of_map(t_vector A);
 int		shadow(int color, double distance);
+void	sort_sprites(t_sprite **sprites, int n);
+void    show_sprites();
+void	update_sprites();
+
 /*=========================================================*/
 #endif

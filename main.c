@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 20:21:54 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 08:26:44 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/05 03:44:34 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ int   draw_map()
 		 /*if (g_game_map[i][j] == '1')
 				draw_square(i, j, g_world.grid_size);*/
 			if (g_game_map[i][j] == '3')
-				g_world.sprites[0].pos = new_vector(g_world.grid_size.width * j, g_world.grid_size.height * i); 
+				g_world.sprites[0].pos = new_vector(g_world.grid_size.width * j + g_world.grid_size.width / 2 , g_world.grid_size.height * i + g_world.grid_size.width / 2); 
+				//g_world.sprites[0].pos = new_vector(g_screen.width / g_world.cols * j, g_screen.height / g_world.rows * i);
 			else if (ft_strchr("NWSDE", g_game_map[i][j]))
 			{
 				t_vector a = new_vector(g_world.grid_size.width * j + g_world.grid_size.width / 2, g_world.grid_size.height * i + g_world.grid_size.height / 2);
+				//t_vector a = new_vector(g_screen.width / g_world.cols * j, g_screen.height / g_world.rows * i);
 				if (!g_is_keypressed)
 					g_world.player.position = a;
 				if (g_game_map[i][j] == 'N')
@@ -74,6 +76,7 @@ void    init_world()
 	g_world.player.turnDirection = 0;
 	g_world.player.rotation.speed = 5 * 0.0174533;
 	g_world.player.speed = 20;
+	g_world.player.offset = 0;
 }
 
 t_image img;
@@ -84,7 +87,9 @@ void    setup()
 	int texture_height;
 	int texture_width;
 	init_world();
-	g_world.grid_size = new_shape( 40, 40);
+	g_world.grid_size = new_shape( 64, 64);
+	//g_world.grid_size.width = g_screen.width / g_world.rows;
+	//g_world.grid_size.height = g_screen.height / g_world.cols;
 	g_window = mlx_new_window(g_mlx, g_screen.width, g_screen.height, "cube3D");
 	img.img = mlx_new_image(g_mlx, g_screen.width, g_screen.height);
 	g_p = (int *)mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.size_line, &img.endian);
@@ -106,6 +111,7 @@ void    setup()
 	g_world.sprites[0].img.data = (int *)mlx_get_data_addr(g_world.sprites[0].img.img, &g_world.sprites[0].img.bits_per_pixel, &g_world.sprites[0].img.bits_per_pixel, &g_world.sprites[0].img.endian);
 	//load_assets();
 	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
+	printf("%d | %d\n", g_world.rows, g_world.cols);
 	draw_map();
 }
 
@@ -118,11 +124,28 @@ int   mouse_press_hook(int key, void *img)
 int    update(int key)
 {
 	(void)key;
+	int i  = -1,j;
+	int f = 0;
+	t_image texture = g_textures[0];
+	int step = texture.height / (SHEIGHT / 2);
+	update_sprites();
+	while (++i < SWIDTH)
+	{
+		j = -1;
+		f = 0;
+		while (++j < SHEIGHT / 2)
+		{
+				int pixel = texture.data[((int)(f) * texture.width + i)];
+				put_pixel(new_vector(i, j) , pixel);
+				f += step;
+		}
+	}
 	if (mlx_hook(g_window, 2, 0, key_pressed, (void*)0))
 		update_field_of_view();
 	mlx_hook(g_window, 3, 0, key_released, (void*)0);
 	update_player();
 	mlx_hook(g_window, 4, 0, mouse_press_hook, (void*)0);
+	show_sprites();
 	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
 	background(0x00);
 	return (0);

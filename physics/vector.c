@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:33:48 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 04:37:52 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/05 01:21:28 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_shape   to_shape(t_vector a)
 
 void			print_vector(t_vector a)
 {
-	//printf("\n x : %f, y : %f \n", a.x, a.y);
+	printf("\n x : %f, y : %f \n", a.x, a.y);
 }
 
 float			vector_len(t_vector vec)
