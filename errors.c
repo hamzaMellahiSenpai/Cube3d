@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 09:51:10 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 04:21:06 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/06 22:49:24 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ t_string messages[] = {
 	"Duplicate Resolution",
 	"Stop Idiot! You have reached the range of g_screen",
 	"Invalid Map",
-	"NO SUCH FILE OR DIRECTORY"
+	"NO SUCH FILE OR DIRECTORY",
+	"Allocation Failed"
 };
 
 void		free_map()
@@ -32,7 +33,7 @@ void		handle_error(int error_index, int status)
 {
 	free_map();
 	perror(messages[error_index]);
-	exit(status);
+	free_all(status);
 }
 
 void	check_for_file(t_string file_name)
@@ -44,6 +45,6 @@ void	check_for_file(t_string file_name)
 	{
 		//perror("NO SUCH FILE OR DIRECTORY : ");
 		perror(file_name);
-		exit(FAIL);
+		free_all(FAIL);
 	}
 }

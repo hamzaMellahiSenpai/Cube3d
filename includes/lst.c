@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 00:30:02 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 04:38:45 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/05 22:27:45 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_lst	*new_lst(void *content)
 {
 	t_lst	*newlist;
 
-	newlist = malloc(sizeof(t_lst));
+	newlist = sf_malloc(sizeof(t_lst));
 	newlist->content = content;
 	newlist->next = NULL;
 	printf("[%s]\n", (char*)((t_pair*)content)->b);
@@ -60,7 +60,7 @@ t_pair	*make_pair(void *a, void *b)
 {
 	t_pair *pair;
 
-	pair = malloc(sizeof(t_pair));
+	pair = sf_malloc(sizeof(t_pair));
 	pair->a = a; //Leakos
 	pair->b = b;
 	//printf("%d || %s\n", (*(int*)pair->a), (t_string)pair->b);

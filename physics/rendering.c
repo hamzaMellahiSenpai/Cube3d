@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 03:18:48 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/05 01:58:55 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/07 06:42:33 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,7 @@ void	render3D(t_ray ray, int col, t_vector Wall_hit, int is_hor_hit)
 		else
 			texture = g_textures[west_texture];
 	}
-	texture = g_textures[west_texture];
-	//render_texture(texture, WALL_HEIGHT , col, Wall_hit, is_hor_hit, distanceFromRay);
-	// float	offset;
-	// float	step;
-	// float	yoffset;
-	// float	f;
-	// float	limit;
-	// float	y;
- 
-	// y = 0 ;
-	// step = (float)texture.height / SHEIGHT / 2;
-	// f = 0;
-	// while (y < sky_height)
-	// {
-	// 	int pixel = texture.data[((int)(f) * texture.width + col)];
-	// 	put_pixel(new_vector(col, y) , pixel);
-	// 	f += step;
-	// 	y++;
-	// }
-    direct_line(col, sky_height, sky_height + WALL_HEIGHT, shadow(0xffffff, distanceFromRay));
-	//float sprite_distance = dist(g_world.sprites[0].pos, PLAYERPOS);
-	//if (sprite_distance < ray.distance)
-		//render_sprite(g_world.sprites[0], WALL_HEIGHT, col, Wall_hit, is_hor_hit, distanceFromRay);
+	render_texture(texture, WALL_HEIGHT, col, Wall_hit, is_hor_hit, distanceFromRay);
 }
 
 void	render(t_ray ray, t_vector A)
@@ -89,33 +67,28 @@ void	render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit
 	while (y < limit)
 	{
 		int pixel = texture.data[((int)(f) * texture.width + (int)offset)];
-		put_pixel(new_vector(col, y) , pixel);
+		put_pixel(new_vector(col, y) , shadow(pixel, distance));
 		f += step;
 		y++;
 	}
 }
-
-/*void	render_sprite(t_sprite sprite)
-{
-
-	float	offset;
-	float	step;
-	float	yoffset;
-	float	f;
-	float	limit;
-	float	y;
-	int		pixel;
-
-	limit = g_world.sprites[0].img.height;
-	y = (g_screen.height - (float)WALL_HEIGHT ) / 2;
-	offset = is_hor_hit ? fmod(Wall_hit.x ,BLOCK_SIZE): fmod(Wall_hit.y, BLOCK_SIZE);
-	f = 0;
-	while (y < limit)
+	/*float step = 64 / (SHEIGHT / 2);
+	float xStep = 64 / SWIDTH;
+	float x = 0;
+	while (++i < SWIDTH)
 	{
-		//if ()
-		pixel = sprite.img.data[((int)(f) * sprite.img.width + (int)offset)];
-		put_pixel(new_vector(col, y) , pixel);
-		y++;
+		j = -1;
+		f = 0;
+		while (++j < SHEIGHT / 2)
+		{
+			int pixel = texture.data[(int)f * 64 + (int)x];
+			put_pixel(new_vector(i, j) , pixel);
+			f += (float)step;
+		}
+		x += xStep;
+		printf("%f\n", xStep);
 	}
-
-}*/
+		g_world.sprites[0].s_x = 0;
+	g_world.sprites[0].s_y =0;
+	g_world.sprites[0].pos = PLAYERPOS;
+	*/

@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/05 03:58:45 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/07 22:57:47 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 # define HEADER_H
 # include <math.h>
 # include <stdlib.h>
+# include "val/malloc.h"
 # include <string.h>
 # include "mlx.h"
 # include <stdio.h>
 # include <time.h>
 # include <unistd.h>
- #include <fcntl.h>
+# include <fcntl.h>
+# include <signal.h>
 # define RIGHT_ARROW 124
 # define LEFT_ARROW 123
 # define UP_ARROW 126
@@ -33,6 +35,7 @@
 # define SHEIGHT g_screen.height
 # define VIEW_ANGLE (float)1.0472
 # define WALL 1
+# define RED 0XFF0000
 # define PP g_world.player.position
 # define WALKDIRECTION g_world.player.walkDirection
 # define TURNDIRECTION g_world.player.turnDirection
@@ -45,10 +48,18 @@
 # define MINI_MAP_SCALE 1
 # define DEG(x) x * 180 / M_PI
 
+int g_frame;
+
 enum							e_states
 {
 	UNCOMPLETED,
 	FAIL
+};
+
+enum							e_images
+{
+	SPRITE,
+	TEXTURE
 };
 
 enum							e_file_infos
@@ -73,7 +84,9 @@ enum							e_errors
 	DUPLICATE_RESOLUTION,
 	DRAWING_OUTSIDE_IMAGE,
 	INVALID_MAP,
-	NON_EXISTENECE_FILE
+	NON_EXISTENECE_FILE,
+	Allocation_Failed,
+	PROCCESS_CANT_BE_CREATED
 };
 
 enum							e_space
@@ -174,6 +187,8 @@ typedef struct		s_sprite
 	float		size;
 	int			s_x;
 	int			s_y;
+	int			visible;
+	t_vector	pos_in_map;
 }									t_sprite;
 
 typedef struct		s_world
@@ -188,7 +203,11 @@ typedef struct		s_world
 	//t_lst						*sprites;
 	int					colors[2];
 	t_ray				*wall_rays;
+	void				*adresses[10000];
+	int					numofsprites;
 }									t_world;
+pid_t pid;
+pid_t tpid;
 
 typedef	struct		s_texture
 {
@@ -249,7 +268,7 @@ int				move_player(int key, void *p);
 void			background(int color);
 void			get_delta_time();
 float			norm_angle(float angle);
-int				walls_at(t_vector coordinate);
+int				wall_at(t_vector coordinate);
 void			render(t_ray ray, t_vector a);
 void			cast(t_ray *ray, int col);
 t_ray			new_ray(float ray_angle);
@@ -290,12 +309,14 @@ void			delete_lst(t_lst** head_ref);
 t_pair			*make_pair(void *a, void *b);
 void	lstiter(t_lst *lst, void *(*f)(void *content));
 void			push_front(t_lst** head_ref, t_lst* new);
-t_image   load_image(t_pair *content);
-int		is_out_of_map(t_vector A);
+void	load_image(int i, t_string path, int type);
+int		is_out_of_window(t_vector A);
 int		shadow(int color, double distance);
-void	sort_sprites(t_sprite **sprites, int n);
+void	sort_sprites();
 void    show_sprites();
 void	update_sprites();
-
+void    *sf_malloc(size_t size);
+void    free_all(int status);
+int		wall_at(t_vector coordinate);
 /*=========================================================*/
 #endif

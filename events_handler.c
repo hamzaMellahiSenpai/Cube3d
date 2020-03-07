@@ -6,18 +6,22 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 18:43:22 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/05 01:05:30 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/07 04:33:01 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+#include <signal.h>
 
 int		key_pressed(int key_code, void *p)
 {
 	g_is_keypressed = 1;
 	(void)p;
 	if (key_code == EXIT_KEY)
-		exit(UNCOMPLETED);
+	{
+		//kill(tpid, SIGKILL);
+		free_all(UNCOMPLETED);
+	}
 	else if (key_code == UP_ARROW)
 		g_world.player.offset += 10;
 	else if (key_code == DOWN_ARROW)

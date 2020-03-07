@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 13:55:39 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 06:20:18 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/07 05:59:10 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,36 +21,41 @@ void    read_resolution(t_string line)
 	g_screen.height = ft_atoi(line + 3 + numofdigits(g_screen.width));
 }
 
-t_image   load_image(t_pair *content)
+void	load_image(int i, t_string path, int type)
 {
-	t_string	path;
-	int			index;
-
-	index = *((int*)content->a);
-	path = (t_string)content->b;
-
-	printf("image has been loaded %s at %d\n", path, index);
-
-	g_textures[index].img = mlx_xpm_file_to_image(g_mlx, path, &g_textures[0].width, &g_textures[0].height);
-	g_textures[index].data = (int *)mlx_get_data_addr(g_textures[index].img, &g_textures[index].bits_per_pixel, &g_textures[index].bits_per_pixel, &g_textures[index].endian);
-	return (g_textures[index]);
+	check_for_file(path);
+	if (type == TEXTURE)
+	{
+		g_textures[i].img = mlx_xpm_file_to_image(g_mlx, path, &g_textures[i].width, &g_textures[i].height);
+		g_textures[i].data = (int *)mlx_get_data_addr(g_textures[i].img, &g_textures[i].bits_per_pixel, &g_textures[i].bits_per_pixel, &g_textures[i].endian);
+	}
+	else if(type == SPRITE)
+	{
+		g_world.sprites[i].img.img = mlx_xpm_file_to_image(g_mlx, path, &g_world.sprites[i].img.width, &g_world.sprites[i].img.height);
+	 	g_world.sprites[i].img.data = (int *)mlx_get_data_addr(g_world.sprites[i].img.img, &g_world.sprites[i].img.bits_per_pixel, &g_world.sprites[i].img.bits_per_pixel, &g_world.sprites[i].img.endian);
+		g_world.sprites[i].visible = 1;
+	}
 }
 
 void    read_image(t_string line, int index)
 {
 	t_string path;
-	if (g_infos[index])
-		return (handle_error(DUPLICATE_TEXTURE, FAIL));
-	//printf("%s\n", line);
-	path = ft_strjoin("assets/sprites/", ft_strjoin(line + 5, ".xpm", 3), 3);
-	//load_image(index, path);
-	//printf("%s | %d", path, index);
-	t_pair *p = make_pair(&index, &path);
-	//printf("%d || %s\n", (*(int*)p->a), (t_string)p->b);
-	printf("has been loaded %s\n", path);
-	if (index == 4)
-		g_world.sprites[0].path = path;
-	//push_back(&(g_world.images),  new_lst(make_pair(&index, &path)));
+
+	if (index <= 3)
+	{
+		if (g_infos[index])
+			return (handle_error(DUPLICATE_TEXTURE, FAIL));
+		path = ft_strjoin("assets/textures/", ft_strjoin(line + 5, ".xpm", 3), 3);
+		load_image(index, path, TEXTURE);
+		free_space(&path);
+	}
+	else
+	{
+		path = ft_strjoin("assets/sprites/", ft_strjoin(line + 5, ".xpm", 3), 3);
+		load_image(index - 4 + g_world.numofsprites, path, SPRITE);
+		free_space(&path);
+		g_world.numofsprites++;
+	}
 	g_infos[index]++;
 }
 
@@ -61,7 +66,8 @@ void    read_color(t_string line, int index, int space)
 	if (g_infos[index]++)
 		 return (handle_error(DUPLICATE_COLOR, FAIL));
 	colors = ft_split(line + 2, ',');
-	g_world.colors[space] = rgb_to_int(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));	
+	g_world.colors[space] = rgb_to_int(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
+	//free_space(colors);
 }
 
 void    check_for_info(t_string line)
@@ -115,10 +121,6 @@ void    read_file(t_string file_name)
 		else if (*line == '1')
 		{
 			tab = ft_split(line, ' ');
-		   /* while(*p)
-				if (ft_strchr(tab[]))
-			if (ft_strchr(p))*/
-				
 			size = ft_strlen(line) / 2 + 1;
 			if (g_world.cols == 0)
 				g_world.cols += size;
@@ -127,12 +129,10 @@ void    read_file(t_string file_name)
 				g_game_map[j][i] = tab[i][0];
 			j++;
 			g_world.rows++;
-			free_space(tab);
 		}
 		else
 			check_for_info(line);
 		free_space(&line);
 	}
-	free_space(tab);
 	// check_missing_info();
 }

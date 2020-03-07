@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 15:33:22 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/05 00:36:02 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/06 22:32:50 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ t_vector	get_horizontal_intersection(t_ray ray, int *hor_found)
 	step.x = BLOCK_SIZE / tan(ray.angle);
 	step.x *= (ray.isFacingLeft && step.x > 0) ? -1 : 1;
 	step.x *= (ray.isFacingRight && step.x < 0) ? -1 : 1;
-	while (!is_out_of_map(A))
+	while (!is_out_of_window(A))
 	{
-		if (walls_at(A))
+		if (wall_at(A))
 		{
 			*hor_found = 1;
 			break;
@@ -71,9 +71,9 @@ t_vector	get_vertical_intersection(t_ray ray, int *ver_found)
 	step.y = BLOCK_SIZE * tan(ray.angle);
 	step.y *= (ray.isFacingUp && step.y > 0) ? -1 : 1;
 	step.y *= (ray.isFacingDown && step.y < 0) ? -1 : 1;
-	while (!is_out_of_map(B))
+	while (!is_out_of_window(B))
 	{
-		if (walls_at(B))
+		if (wall_at(B))
 		{
 			*ver_found = 1;
 			break;

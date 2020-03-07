@@ -2,6 +2,8 @@
     "files.associations": {
         "cstdlib": "c",
         "header.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "malloc.h": "c",
+        "sstream": "c"
     }
 }
