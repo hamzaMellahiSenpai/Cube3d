@@ -28,4 +28,4 @@ bc.mp3
 
 #SG ./assets/sprites/gun  | 0 | 1 | 0 | 22 | 9
 SC ./assets/sprites/barrel | 22 | 9 | 1 | 5 | 1 | 60
-S1 ./assets/sprites/coin | 22 | 7 | 1 | 5 | 1 | 60
+SK ./assets/sprites/coin | 22 | 7 | 1 | 5 | 1 | 60
