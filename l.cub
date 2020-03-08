@@ -6,11 +6,6 @@ EA ./assets/textures/colorstone
 F 72,80,83
 C 72,80,83
 
-
-nofframes playerOnWake LOOP x y
-smw_coin.wav
-bc.mp3
-
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 4 0 0 1
 1 0 1 1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1

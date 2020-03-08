@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 08:29:20 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/08 08:33:00 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:52:13 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	render_sprite(t_sprite sprite)
 				continue;
 			if (sprite.anim.isPlayOnAwake || sprite.anim.isPlaying)
 			{
-				if (sprite.anim.is_loop || sprite.anim.currentframe < sprite.anim.nofframes)
+				//if (sprite.anim.is_loop || sprite.anim.currentframe < sprite.anim.nofframes)
 					pixel = sprite.img.data[sprite.img.width * (sprite.img.height * j / (int)sprite.size) + (64  * i / (int)sprite.size)  +
 					((sprite.anim.currentframe * sprite.anim.fps / 2 )% sprite.anim.nofframes) * 64];
 			}
