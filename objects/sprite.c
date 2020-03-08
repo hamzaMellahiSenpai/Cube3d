@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 08:29:20 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 05:49:58 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:33:00 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,16 @@ void	render_sprite(t_sprite sprite)
 		{
 			if (sprite.s_y + j < 0 || sprite.s_y + j > SHEIGHT)
 				continue;
-			//pixel = sprite.img.data[sprite.img.width * (sprite.img.height * j / (int)sprite.size) + (64  * i / (int)sprite.size) + (((int)(g_frame * 0.25 )% 5) * 64)];
-			pixel = sprite.img.data[sprite.img.width * (sprite.img.height * j / (int)sprite.size) + (64  * i / (int)sprite.size)];
+			if (sprite.anim.isPlayOnAwake || sprite.anim.isPlaying)
+			{
+				if (sprite.anim.is_loop || sprite.anim.currentframe < sprite.anim.nofframes)
+					pixel = sprite.img.data[sprite.img.width * (sprite.img.height * j / (int)sprite.size) + (64  * i / (int)sprite.size)  +
+					((sprite.anim.currentframe * sprite.anim.fps / 2 )% sprite.anim.nofframes) * 64];
+			}
+			else
+				pixel = sprite.img.data[sprite.img.width * (sprite.img.height * j / (int)sprite.size) + (64  * i / (int)sprite.size)];
 			if (pixel != 0)
-				//if (((sprite.s_x + i) >= 0 && (sprite.s_y + i) < SWIDTH) &&
-				//	((y + j) >= 0 && (y  + j) < SHEIGHT))
-			put_pixel(new_vector(sprite.s_x + i, sprite.s_y + j), pixel);
-			//printf("%d | %d \n", sprite.s_x + i, sprite.s_y + j);
+				put_pixel(new_vector(sprite.s_x + i, sprite.s_y + j), pixel);
 		}
 	}
 }
@@ -84,13 +87,12 @@ void    show_sprites()
 	update_sprites();
 	while (++i < g_world.numofsprites)
 	{
+		
 		if (g_world.sprites[i].visible == 1)
 		{
 			g_world.sprites[i].distance = dist(g_world.sprites[i].pos , g_world.player.position);
 			sprite = g_world.sprites[i];
 			angle = atan2(sprite.pos.y - PLAYERPOS.y, sprite.pos.x - PLAYERPOS.x);
-			//print_vector(sprite.pos);
-			//print_vector(g_world.player.position);
 			while (angle - PROTATIONANGLE > M_PI)
 				angle -= 2 * M_PI;
 			while (angle - PROTATIONANGLE < -M_PI)

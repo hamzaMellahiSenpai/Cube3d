@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 18:43:22 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 04:33:01 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:40:19 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,7 @@ int		key_pressed(int key_code, void *p)
 	else if (key_code == W_KEY)
 		g_world.player.walkDirection = 1;
 	else if (key_code == S_KEY)
-		g_world.player.walkDirection = -1;
-	//else if (key_code == W_KEY)
-		
-	//else if (key_code == W_KEY)
-		
+		g_world.player.walkDirection = -1;		
 	return (1);
 }
 

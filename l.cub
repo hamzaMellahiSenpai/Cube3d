@@ -1,15 +1,16 @@
-R 1700 1300
-NO ./greystone
-SO ./bluestone
-WE ./redbrick
-EA ./colorstone
+R 900 700
+NO ./assets/textures/greystone
+SO ./assets/textures/bluestone
+WE ./assets/textures/redbrick
+EA ./assets/textures/colorstone
 F 72,80,83
 C 72,80,83
 
-SC ./gun
 
+nofframes playerOnWake LOOP x y
 smw_coin.wav
 bc.mp3
+
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 4 0 0 1
 1 0 1 1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
@@ -19,9 +20,12 @@ bc.mp3
 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 1
 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 1
 1 1 0 0 0 0 0 0 1 1 0 1 0 1 0 1 1 1 0 0 0 0 W 0 0 0 0 0 1
-1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 1 0 1
 1 1 0 0 0 0 0 0 1 1 0 1 0 1 0 1 1 1 1 1 0 1 1 1 1 0 0 0 1
 1 1 1 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 0 1 1 1 1 0 0 0 1
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
- DDDSHEIGHT * 2 / 3 
+
+#SG ./assets/sprites/gun  | 0 | 1 | 0 | 22 | 9
+SC ./assets/sprites/barrel | 22 | 9 | 1 | 5 | 1 | 60
+S1 ./assets/sprites/coin | 22 | 7 | 1 | 5 | 1 | 60

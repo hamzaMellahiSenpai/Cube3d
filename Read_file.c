@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 13:55:39 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 05:59:10 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:45:01 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,66 @@ void	load_image(int i, t_string path, int type)
 		g_world.sprites[i].img.img = mlx_xpm_file_to_image(g_mlx, path, &g_world.sprites[i].img.width, &g_world.sprites[i].img.height);
 	 	g_world.sprites[i].img.data = (int *)mlx_get_data_addr(g_world.sprites[i].img.img, &g_world.sprites[i].img.bits_per_pixel, &g_world.sprites[i].img.bits_per_pixel, &g_world.sprites[i].img.endian);
 		g_world.sprites[i].visible = 1;
+		g_world.sprites[i].anim.is_static = 0;
 	}
+}
+
+void	fillCell(int x, int y, char type)
+{
+	printf("[%c]\n",g_game_map[y][x]);
+	//if (g_game_map[y][x] == '0')
+		g_game_map[y][x] = type;
+	//else
+	//	return (handle_error(INVALID_SPRITE_PLACEMENT, FAIL));
+}
+
+void	load_texture(t_string line, int index)
+{
+	t_string path;
+	t_string *tab;
+
+	if (g_infos[index])
+		return (handle_error(DUPLICATE_TEXTURE, FAIL));
+	tab = ft_split(line, ' ');
+	if (tab[1])
+	{
+		path = ft_strjoin(tab[1], ".xpm", 3);
+		load_image(index, path, TEXTURE);
+		printf("%s has been loaded\n", path);
+	}
+	else
+		return (handle_error(INVALID_PATH, FAIL));
 }
 
 void    read_image(t_string line, int index)
 {
-	t_string path;
+	t_string *tab;
+	t_sprite sprite;
+	t_string *tab2;
 
 	if (index <= 3)
-	{
-		if (g_infos[index])
-			return (handle_error(DUPLICATE_TEXTURE, FAIL));
-		path = ft_strjoin("assets/textures/", ft_strjoin(line + 5, ".xpm", 3), 3);
-		load_image(index, path, TEXTURE);
-		free_space(&path);
-	}
+		load_texture(line, index);
 	else
 	{
-		path = ft_strjoin("assets/sprites/", ft_strjoin(line + 5, ".xpm", 3), 3);
-		load_image(index - 4 + g_world.numofsprites, path, SPRITE);
-		free_space(&path);
+		tab = ft_split(line, '|');
+		tab2 = ft_split(tab[0], ' ');
+		sprite.pos.x = ft_atoi(tab[1]) * BLOCK_SIZE + BLOCK_SIZE / 2;
+		sprite.pos.y = ft_atoi(tab[2]) * BLOCK_SIZE + BLOCK_SIZE / 2;
+		sprite.path = ft_strjoin(tab2[1], ".xpm", 3);
+		sprite.anim.isPlayOnAwake = ft_atoi(tab[3]);
+		if (sprite.anim.isPlayOnAwake)
+			sprite.anim.is_running = 1;
+		sprite.anim.nofframes = ft_atoi(tab[4]);
+		sprite.anim.is_loop = ft_atoi(tab[5]);
+		sprite.anim.fps = ft_atoi(tab[6]);
+		sprite.pos_in_map = new_vector(sprite.pos.x, sprite.pos.y);
+		//sprite.pos = new_vector(BLOCK_SIZE * sprite.pos.x + BLOCK_SIZE / 2 , BLOCK_SIZE * sprite.pos.x + BLOCK_SIZE / 2); 
+		g_world.sprites[index - 4 + g_world.numofsprites] = sprite;
+		load_image(index - 4 +  g_world.numofsprites, sprite.path, SPRITE);
+		printf("%d | %d | %d \n", sprite.anim.isPlayOnAwake, sprite.anim.nofframes, sprite.anim.is_loop);
+		fillCell(sprite.pos.x,sprite.pos.y,tab[0][1]);
 		g_world.numofsprites++;
+		printf("%s has been loaded\n", sprite.path);
 	}
 	g_infos[index]++;
 }

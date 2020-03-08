@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 22:57:47 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:40:01 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define HEADER_H
 # include <math.h>
 # include <stdlib.h>
-# include "val/malloc.h"
 # include <string.h>
 # include "mlx.h"
 # include <stdio.h>
@@ -86,7 +85,9 @@ enum							e_errors
 	INVALID_MAP,
 	NON_EXISTENECE_FILE,
 	Allocation_Failed,
-	PROCCESS_CANT_BE_CREATED
+	PROCCESS_CANT_BE_CREATED,
+	INVALID_PATH,
+	INVALID_SPRITE_PLACEMENT
 };
 
 enum							e_space
@@ -153,6 +154,9 @@ typedef struct		s_player
 	int						walkDirection;
 	int						turnDirection;
 	int					offset;
+	int					currenthealth;
+	int					maxhealth;
+	int					coins;
 }									t_player;
 
 typedef struct		s_ray
@@ -178,6 +182,18 @@ typedef struct		s_image
 	int		*data;
 }									t_image;
 
+typedef	struct		s_animation
+{
+	int		isPlayOnAwake;
+	int		is_loop;
+	int		is_running;
+	int		is_static;
+	int		nofframes;
+	int		currentframe;
+	int		fps;
+	int		isPlaying;
+}					t_animation;
+
 typedef struct		s_sprite
 {
 	t_image		img;
@@ -189,6 +205,7 @@ typedef struct		s_sprite
 	int			s_y;
 	int			visible;
 	t_vector	pos_in_map;
+	t_animation	anim;
 }									t_sprite;
 
 typedef struct		s_world

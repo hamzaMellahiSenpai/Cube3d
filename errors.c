@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 09:51:10 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/06 22:49:24 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 05:48:31 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ t_string messages[] = {
 	"Stop Idiot! You have reached the range of g_screen",
 	"Invalid Map",
 	"NO SUCH FILE OR DIRECTORY",
-	"Allocation Failed"
+	"Allocation Failed",
+	"PROCCESS_CANT_BE_CREATED",
+	"INVALID_PATH",
+	"INVALID_SPRITE_PLACEMENT"
 };
 
 void		free_map()

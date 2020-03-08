@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 20:21:54 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 23:00:27 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:48:38 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,17 @@ int *g_p;
 
 int   draw_map()
 {
-	int i = -1;
+	int i = -1, k = 0;
 	int j;
-	int k;
 
-	k = -1;
 	while(++i < g_world.rows)
 	{
 		j = 0;
 		while (j < g_world.cols)
 		{
-			//if (g_game_map[i][j] == '0')
-				//cube(new_vector(g_world.grid_size.width * j,i * g_world.grid_size.height), g_world.grid_size.width, 0x000000);
-		 /*if (g_game_map[i][j] == '1')
-				draw_square(i, j, g_world.grid_size);*/
-			if (g_game_map[i][j] == 'C')
+			if (ft_strchr("NWSDE", g_game_map[i][j]))
 			{
-				if (++k < g_world.numofsprites)
-				{
-					g_world.sprites[k].pos_in_map = new_vector(j,i);
-					g_world.sprites[k].pos = new_vector(g_world.grid_size.width * j + g_world.grid_size.width / 2 , g_world.grid_size.height * i + g_world.grid_size.width / 2); 
-				}
-				else
-					handle_error(INVALID_MAP, FAIL);
-			}
-			else if (ft_strchr("NWSDE", g_game_map[i][j]))
-			{
-				t_vector a = new_vector(g_world.grid_size.width * j + g_world.grid_size.width / 2, g_world.grid_size.height * i + g_world.grid_size.height / 2);
-				//t_vector a = new_vector(g_screen.width / g_world.cols * j, g_screen.height / g_world.rows * i);
+				t_vector a = new_vector(BLOCK_SIZE * j + BLOCK_SIZE / 2, BLOCK_SIZE * i + BLOCK_SIZE / 2);
 				if (!g_is_keypressed)
 					g_world.player.position = a;
 				if (g_game_map[i][j] == 'N')
@@ -56,8 +39,10 @@ int   draw_map()
 				else
 						g_world.player.rotation.angle = 180;
 			}
+			printf("%c ", g_game_map[i][j]);
 			j++;
 		}
+		printf("\n");
 	}
 	return (1);
 }
@@ -68,17 +53,6 @@ void  *pc(void *content)
 	return NULL;
 }
 
-void    load_assets()
-{
-		void *(f);
-		f = load_image;
-		//f = pc;
-
-	//printf("Hello!\n");
-	//lstiter(g_world.images, pc);
-	//lstiter(g_world.images, f);
-}
-
 void    init_world()
 {
 	g_world.player.walkDirection = 0;
@@ -86,6 +60,9 @@ void    init_world()
 	g_world.player.rotation.speed = 5 * 0.0174533;
 	g_world.player.speed = 20;
 	g_world.player.offset = 0;
+	g_world.player.coins = 0;
+	g_world.player.maxhealth = 100;
+	g_world.player.currenthealth = 60;
 }
 
 t_image img;
@@ -101,8 +78,7 @@ void    setup()
 	img.img = mlx_new_image(g_mlx, g_screen.width, g_screen.height);
 	g_p = (int *)mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.size_line, &img.endian);
 	g_world.wall_rays = sf_malloc(sizeof(t_ray) * (g_screen.width + 1));
-	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
-	printf("%d | %d\n", g_world.rows, g_world.cols);
+	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);		
 	draw_map();
 }
 
@@ -110,7 +86,7 @@ int 	mouse(int x, int y)
 {
 	if (!is_out_of_window(new_vector(x,y)))
 	{
-		printf("x : %d | y : %d\n", x , y);
+		//printf("x : %d | y : %d\n", x , y);
 		if ((x >= SWIDTH - 30) && x < SWIDTH)
 			TURNDIRECTION = 1;
 		else if ((x <= 30) && x > 0)
@@ -143,30 +119,32 @@ int    update(int key)
 	mlx_hook(g_window, 3, 0, key_released, (void*)0);
 	update_player();
 	show_sprites();
-	float ystep = g_world.sprites[0].img.height / (SHEIGHT / 3);
-	float xStep = g_world.sprites[0].img.width / (SWIDTH / 3);
-	float x = 0;
-	while (++i < (SWIDTH / 3))
-	{
-		j = 0;
-		f = 0;
-		while (++j < (SHEIGHT / 3))
-		{
-			int pixel = g_world.sprites[0].img.data[(int)f * g_world.sprites[0].img.width + (int)x];
-			if (pixel != 0)
-				put_pixel(new_vector(i + SWIDTH/3 - g_world.sprites[0].img.width, j + SHEIGHT *2/3) , pixel);
-			f += (float)ystep;
-		}
-		x += xStep;
-	}
-	draw_cursor();
+	// float ystep = g_world.sprites[0].img.height / (SHEIGHT / 3);
+	// float xStep = g_world.sprites[0].img.width / (SWIDTH / 3);
+	// float x = 0;
+	// while (++i < (SWIDTH / 3))
+	// {
+	// 	j = 0;
+	// 	f = 0;
+	// 	while (++j < (SHEIGHT / 3))
+	// 	{
+	// 		int pixel = g_world.sprites[0].img.data[(int)f * g_world.sprites[0].img.width + (int)x];
+	// 		if (pixel != 0)
+	// 			put_pixel(new_vector(i + SWIDTH/3 - g_world.sprites[0].img.width, j + SHEIGHT *2/3) , pixel);
+	// 		f += (float)ystep;
+	// 	}
+	// 	x += xStep;
+	// } 
+	// draw_cursor();
+	i = -1;
+	while (++i < g_world.numofsprites)
+		if (g_world.sprites[i].anim.is_running)
+			g_world.sprites[i].anim.currentframe++;
+	
 	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
 	background(0);
-	g_frame++;
-	g_frame %= 10000;
 	return (0);
 }
-# include "val/malloc.h"
 
 void	init_game()
 {
@@ -191,13 +169,10 @@ int   main(int ac, char **av)
 	g_world.numofsprites = 0;
 	g_mlx = mlx_init();
 	read_file(av[1]);
-	//system(“COLOR 1A”);
-	//init_game();
+	printf("%d | %d\n", g_world.rows, g_world.cols);
 	setup();
 	mlx_loop_hook(g_mlx, update, (void*)0);
 	mlx_hook(g_window, 6,0, mouse, (void*)0);
 	mlx_loop(g_mlx);
-	//system("kill 0");
-	//leakcheck();
 	return 0;
 }

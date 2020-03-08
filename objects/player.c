@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:33:35 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/07 04:34:19 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 05:57:38 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,36 @@ int		look_for_sp(int x, int y)
 	return -1;
 }
 
+void	Destroy(int x, int y)
+{
+	g_game_map[y][x] = '0';
+	g_world.sprites[look_for_sp(x,y)].visible = 0;
+}
+
+void	Die()
+{
+	// Show Game Over Menu with blood 
+}
+
+void	damage(int amount)
+{
+	g_world.player.health -= amount;
+	if (g_world.player.health <= 0)
+		Die();
+}
+
+void	heal(int amount)
+{
+	if (g_world.player.currenthealth + amount <= g_world.player.maxhealth)
+		g_world.player.currenthealth += amount;
+}
+
+
 int		object_at(t_vector coordinate)
 {
 	int		x;
 	int		y;
-
+	int i;
 	x = coordinate.x / g_world.grid_size.width;
 	y = coordinate.y / g_world.grid_size.height;
 	if (x == 2 && y == 2)
@@ -35,9 +60,17 @@ int		object_at(t_vector coordinate)
 		tpid = fork();
 		if (tpid == 0)
 			system("mpg123 -q assets/sounds/coin.mp3");
-		//kill(tpid, SIGKILL);
-		g_game_map[y][x] = '0';
-		g_world.sprites[look_for_sp(x,y)].visible = 0;
+		Destroy(x,y);
+	}
+	else if (g_game_map[y][x] == 'T')
+	{
+		damage(10);
+		Destroy(x,y);
+	}
+	else if (g_game_map[y][x] == 'H')
+	{
+		heal(10);
+		Destroy(x,y);
 	}
 	return (g_game_map[y][x] == '1');
 }
