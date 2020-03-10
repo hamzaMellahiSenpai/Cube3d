@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:33:35 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/08 05:57:38 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 08:56:37 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int		object_at(t_vector coordinate)
 {
 	int		x;
 	int		y;
-	int i;
+	int		i;
+
 	x = coordinate.x / g_world.grid_size.width;
 	y = coordinate.y / g_world.grid_size.height;
 	if (x == 2 && y == 2)
@@ -72,7 +73,7 @@ int		object_at(t_vector coordinate)
 		heal(10);
 		Destroy(x,y);
 	}
-	return (g_game_map[y][x] == '1');
+	return (ft_strchr("1THU", g_game_map[y][x]) == NULL ? 0 : 1);
 }
 
 void	update_player(void)

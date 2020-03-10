@@ -6,13 +6,13 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 08:21:56 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/06 22:12:00 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/10 00:25:04 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header.h"
 
-size_t	ft_strlen(const char *str)
+size_t		ft_strlen(const char *str)
 {
 	size_t i;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strdup(const char *str)
+char		*ft_strdup(const char *str)
 {
 	int		len;
 	char	*dest;
@@ -36,7 +36,7 @@ char	*ft_strdup(const char *str)
 	return (dest);
 }
 
-char	*ft_strchr(const char *s, int c)
+char		*ft_strchr(const char *s, int c)
 {
 	char	*str;
 
@@ -48,7 +48,7 @@ char	*ft_strchr(const char *s, int c)
 	return (str);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2, int index)
+char		*ft_strjoin(char const *s1, char const *s2, int index)
 {
 	int		i;
 	int		k;
@@ -75,7 +75,7 @@ char	*ft_strjoin(char const *s1, char const *s2, int index)
 	return (s12);
 }
 
-char	*ft_strcpy(char *dest, const char *src)
+char		*ft_strcpy(char *dest, const char *src)
 {
 	int i;
 

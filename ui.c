@@ -6,21 +6,21 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 03:13:31 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/03 05:03:00 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/08 14:13:36 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void		text(char *str, int x, int y)
+void		text(char *str, int x, int y, int color)
 {
-	char c;
+	//char c;
 
-	while (*str)
-	{
-		c = *str++;
-		mlx_string_put(g_mlx, g_window, x, y, 0x00FF00, (char*)&c);
-	}
+	//while (*str)
+	//{
+	//	c = *str++;
+		mlx_string_put(g_mlx, g_window, x, y, color, str);
+	//}
 }
 
 float		deg_to_rad(int angle)

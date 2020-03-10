@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 05:08:58 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/05 22:27:28 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/10 04:07:22 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ static	char		**fill(const char *s, char c, char **mots)
 	while (s[i] != '\0' && j < wordscount(s, c))
 	{
 		k = 0;
-		while (s[i] == c  && s[i])
+		while (s[i] == c && s[i])
 			i++;
-		mots[j] = sf_malloc(sizeof(char) * wordlong(s,i,c) + 1);
+		mots[j] = sf_malloc(sizeof(char) * wordlong(s, i, c) + 1);
 		if (mots[j] == NULL)
 			return (freememory(mots, j));
 		while (s[i] != c && s[i])
@@ -94,6 +94,6 @@ char				**ft_split(char const *s, char c)
 		return (NULL);
 	mots = sf_malloc(sizeof(char *) * (wordscount(s, c) + 1));
 	if (!mots)
-		return (NULL);
+		handle_error(Allocation_Failed, FAIL);
 	return (fill(s, c, mots));
 }

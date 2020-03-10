@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/08 08:40:01 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/10 03:35:56 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 # define LEFT_ARROW 123
 # define UP_ARROW 126
 # define DOWN_ARROW 125
+# define CTRL_KEY 256
 # define EXIT_KEY 53
+# define SPACE_KEY 49
 # define W_KEY 13
 # define A_KEY 0
 # define D_KEY 2
@@ -41,6 +43,7 @@
 # define PROTATIONSPEED g_world.player.rotation.speed
 # define PROTATIONANGLE g_world.player.rotation.angle
 # define PLAYERPOS g_world.player.position
+# define PLAYERH g_world.player.height
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
 # define BLOCK_SIZE 64
@@ -119,8 +122,8 @@ typedef	struct		s_pair
 
 typedef	struct    s_shape
 {
-	float		width;
-	float		height;
+	int		width;
+	int		height;
 }									t_shape;
 
 typedef struct		s_lst
@@ -153,10 +156,11 @@ typedef struct		s_player
 	float					health;
 	int						walkDirection;
 	int						turnDirection;
-	int					offset;
+	float					offset;
 	int					currenthealth;
 	int					maxhealth;
 	int					coins;
+	int					height;
 }									t_player;
 
 typedef struct		s_ray
@@ -187,7 +191,6 @@ typedef	struct		s_animation
 	int		isPlayOnAwake;
 	int		is_loop;
 	int		is_running;
-	int		is_static;
 	int		nofframes;
 	int		currentframe;
 	int		fps;
@@ -206,6 +209,11 @@ typedef struct		s_sprite
 	int			visible;
 	t_vector	pos_in_map;
 	t_animation	anim;
+	int			is_static;
+	int			bc;
+	int			n;
+	int			y_offset;
+	int			type;
 }									t_sprite;
 
 typedef struct		s_world
@@ -220,8 +228,9 @@ typedef struct		s_world
 	//t_lst						*sprites;
 	int					colors[2];
 	t_ray				*wall_rays;
-	void				*adresses[10000];
+	t_lst				*adresses;
 	int					numofsprites;
+	int					gravity;
 }									t_world;
 pid_t pid;
 pid_t tpid;
@@ -269,6 +278,7 @@ void			direct_line(int x, int start, int end, int color);
 void			render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
 void			render_sprite(t_sprite sprite);
 float			dist(t_vector a, t_vector b);
+void			save_first_frame_in_bmp_file();
 /*
 =======================================================
 */
@@ -276,7 +286,6 @@ float			dist(t_vector a, t_vector b);
 int				handle_input(int key, void *p);
 void			update_player();
 void			line(int x0, int y0, int x1, int y1, int color);
-void			text(char *str, int x, int y);
 float			deg_to_rad(int angle);
 void			put_pixel(t_vector a, int color);
 void			rect(t_vector position, float width, float height, int color);
@@ -304,6 +313,7 @@ char			*ft_strcpy(char *dest, const char *src);
 void			free_space(char **ptr);
 int				ft_atoi(const char *str);
 void			*ft_memset(void *p, int val, size_t size);
+void			*ft_memcpy(void *dst, const void *src, size_t len);
 char			**ft_split(char const *s, char c);
 int				numofdigits(int n);
 int				ft_strcmp(const char *s1, const char *s2);
@@ -322,7 +332,7 @@ int				key_released(int key_code, void *p);
 /*=========================================================*/
 void			push_back(t_lst **alst, t_lst *new);
 t_lst			*new_lst(void *content);
-void			delete_lst(t_lst** head_ref);
+void			deleteList(t_lst** head_ref);
 t_pair			*make_pair(void *a, void *b);
 void	lstiter(t_lst *lst, void *(*f)(void *content));
 void			push_front(t_lst** head_ref, t_lst* new);
@@ -335,5 +345,7 @@ void	update_sprites();
 void    *sf_malloc(size_t size);
 void    free_all(int status);
 int		wall_at(t_vector coordinate);
+void		text(char *str, int x, int y, int color);
+int 	mouse(int x, int y);
 /*=========================================================*/
 #endif

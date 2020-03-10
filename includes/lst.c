@@ -34,10 +34,9 @@ t_lst	*new_lst(void *content)
 {
 	t_lst	*newlist;
 
-	newlist = sf_malloc(sizeof(t_lst));
+	newlist = malloc(sizeof(t_lst));
 	newlist->content = content;
 	newlist->next = NULL;
-	printf("[%s]\n", (char*)((t_pair*)content)->b);
 	return (newlist);
 }
 

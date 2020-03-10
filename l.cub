@@ -22,5 +22,7 @@ C 72,80,83
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 
 #SG ./assets/sprites/gun  | 0 | 1 | 0 | 22 | 9
-SC ./assets/sprites/barrel | 22 | 9 | 1 | 5 | 1 | 60
-SK ./assets/sprites/coin | 22 | 7 | 1 | 5 | 1 | 60
+SC ./assets/sprites/coin | 22 | 9 | 1 | 5 | 1 | 60 | 1 | 0
+SU ./assets/sprites/barrel | 22 | 7 | 1 | 1 | 1 | 60 | 1 | 0
+#SG ./assets/sprites/weapons | 22 | 10 | 0 | 5 | 0 | 60 | 2 | 0
+SB ./assets/sprites/health_bar | 22 | 10 | 0 | 1 | 0 | 0 | 2 | 1

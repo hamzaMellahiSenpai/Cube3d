@@ -74,13 +74,19 @@ int		numofdigits(int n)
 	return (c);
 }
 
-t_string	ft_strlcat(char *dst, const char *src)
+void	*ft_memcpy(void *dst, const void *src, size_t len)
 {
-	size_t	i;
+	char		*d;
+	const char	*s;
 
-	i = 0;
-	while (*src)
-		*dst++ = *src++;
-	*dst = '\0';
+	d = dst;
+	s = src;
+	while (len > 0)
+	{
+		*d = *s;
+		d++;
+		s++;
+		len--;
+	}
 	return (dst);
 }
