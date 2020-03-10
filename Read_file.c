@@ -197,14 +197,23 @@ void	set_up_map(t_string file_name, int *cols, int *rows)
 
 void	fill_map()
 {
+	ft_memset(&g_world.map, -1, g_world.rows * g_world.cols);
 	int i;
 	int j;
 
 	i = -1;
 	j = -1;
-	while (++i < cols)
+	g_world.map = (char**)sf_malloc(sizeof(g_world.rows * sizeof(char*)));
+	while (++i < g_world.rows)
 	{
-
+		j = -1;
+		g_world.map[i] = (char*)sf_malloc(sizeof(g_world.cols * sizeof(char)));
+		while (++j < g_world.cols)
+		{
+			//g_world.map[i][j] = -1;
+			printf("%c ", g_world.map[i][j]);
+		}
+		printf("\n");
 	}
 }
 
@@ -216,9 +225,9 @@ void    read_file(t_string file_name)
 	char **tab;
 	int cols,rows;
 
-	set_up_map(file_name, &cols, &rows);
-	fill_map();
-	printf("[%d | %d]\n", g_world.cols, g_world.cols.rows);
+	set_up_map(file_name, &g_world.cols, &g_world.rows);
+	//fill_map();
+	printf("[%d | %d]\n", g_world.cols, g_world.rows);
 	
 	/*tab = ft_split(file_name, '.');
 	//if (ft_strcmp(tab[sizeof(tab) / sizeof(tab[0]) - 1] , "cub") != 0)

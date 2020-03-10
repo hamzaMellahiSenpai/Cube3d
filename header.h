@@ -232,6 +232,7 @@ typedef struct		s_world
 	t_lst				*adresses;
 	int					numofsprites;
 	int					gravity;
+	char				**map;
 }									t_world;
 pid_t pid;
 pid_t tpid;
