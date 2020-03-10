@@ -89,7 +89,7 @@ char		*ft_strcpy(char *dest, const char *src)
 	return (dest + i);
 }
 
-char		*ft_strtrim(char const *s, char const *set, int index)
+char		*ft_strtrim(char const *s, char const *set)
 {
         int             debut;
         int             fin;

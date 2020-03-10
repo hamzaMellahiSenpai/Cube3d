@@ -16,11 +16,11 @@ extern int *g_p;
 
 void	fill_header(unsigned char **header, int imagesize)
 {
-	uint16_t bitcount;
-	uint32_t bisize;
-	uint32_t bfoffbits;
-	uint32_t filesize;
-	uint16_t biplanes;
+	u_int16_t bitcount;
+	u_int32_t bisize;
+	u_int32_t bfoffbits;
+	u_int32_t filesize;
+	u_int16_t biplanes;
 
 	biplanes = 1;
 	filesize = 54 + imagesize;
@@ -64,7 +64,7 @@ void	fill_buf(unsigned char **buf, int width_in_bytes, int imagesize)
 void	save_first_frame_in_bmp_file(void)
 {
 	int				width_in_bytes;
-	uint32_t		imagesize;
+	u_int32_t		imagesize;
 	unsigned char	*buf;
 	int				fd;
 	unsigned char	*header;

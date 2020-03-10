@@ -28,6 +28,7 @@ void		handle_error(int error_index, int status)
 	messages[9] = "PROCCESS_CANT_BE_CREATED";
 	messages[10] = "INVALID_PATH";
 	messages[11] = "INVALID_SPRITE_PLACEMENT";
+	messages[12] = "INVALID_RESOLUTION";
 	perror(messages[error_index]);
 	free_all(status);
 }

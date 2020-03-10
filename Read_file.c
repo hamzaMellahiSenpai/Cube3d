@@ -13,12 +13,51 @@
 #include "header.h"
 #include <fcntl.h>
 
+
+int		tablen(void **tab)
+{
+	int i;
+
+	i = 0;
+	while (*tab++)
+		i++;
+	return (i);
+}
+
+int		ft_isdigit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+int		isnumber(t_string str)
+{
+	while (*str)
+		if (!(ft_isdigit(*str++)))
+			return (0);
+	return (1);
+}
+
 void    read_resolution(t_string line)
 {
+	t_string *tab;
+	t_string tmp;
+
 	if (g_infos[resolution]++)
-		return (handle_error(MISSING_INFO, FAIL));
-	g_screen.width = ft_atoi(line + 2);
-	g_screen.height = ft_atoi(line + 3 + numofdigits(g_screen.width));
+		return (handle_error(DUPLICATE_RESOLUTION, FAIL));
+	tab = ft_split(line, ' ');
+	//printf("[%d]\n", tablen((void**)tab));
+	if (tablen((void**)tab) != 3)
+		return (handle_error(INVALID_RESOLUTION, FAIL));
+	tmp = ft_strtrim(tab[1], " ");
+	if (!isnumber(tmp))
+		return (handle_error(INVALID_RESOLUTION, FAIL));
+	g_screen.width = ft_atoi(tmp);
+	tmp = ft_strtrim(tab[2], " ");
+	if (!isnumber(tmp))
+		return (handle_error(INVALID_RESOLUTION, FAIL));
+	g_screen.height = ft_atoi(tmp);
 }
 
 void	load_image(int i, t_string path, int type)
@@ -46,16 +85,6 @@ void	fillCell(int x, int y, char type)
 		return (handle_error(INVALID_SPRITE_PLACEMENT, FAIL));
 }
 
-int		tab_len(void **tab)
-{
-	int i;
-
-	i = 0;
-	while (*tab)
-		i++;
-	return (i);
-}
-
 void	load_texture(t_string line, int index)
 {
 	t_string path;
@@ -64,27 +93,28 @@ void	load_texture(t_string line, int index)
 	if (g_infos[index])
 		return (handle_error(DUPLICATE_TEXTURE, FAIL));
 	tab = ft_split(line, ' ');
-	if (tab[1])
-	{
-		path = ft_strjoin(tab[1], ".xpm", 3);
-		load_image(index, path, TEXTURE);
-		printf("%s has been loaded\n", path);
-	}
-	else
+	if (tablen((void**)tab) != 2 || ft_strlen(tab[0]) != 2)
 		return (handle_error(INVALID_PATH, FAIL));
+	path = ft_strjoin(tab[1], ".xpm", 3);
+	load_image(index, path, TEXTURE);
+	printf("%s has been loaded\n", path);
 }
 
 void	load_sprite(t_string line, int index)
 {
-	t_string *tab;
-	t_sprite sprite;
-	t_string *tab2;
+	t_string	*tab;
+	t_sprite	sprite;
+	t_string	*tab2;
+	t_string	tmp;
 
 	tab = ft_split(line, '|');
 	tab2 = ft_split(tab[0], ' ');
 	sprite.path = ft_strjoin(tab2[1], ".xpm", 3);
 	sprite.type = tab2[0][1];
-	sprite.anim.isPlayOnAwake = ft_atoi(tab[3]);
+	tmp = ft_strtrim(tab[3], " ");
+	//if (ft_isdigit(tmp))
+//		return (handle_error(INVALID_SPRITE_INFO, FAIL));
+	sprite.anim.isPlayOnAwake = ft_atoi(tmp);
 	sprite.anim.is_running = sprite.anim.isPlayOnAwake ? 1 : 0;
 	sprite.anim.nofframes = ft_atoi(tab[4]);
 	sprite.anim.is_loop = ft_atoi(tab[5]);
@@ -120,12 +150,16 @@ void    read_image(t_string line, int index)
 
 void    read_color(t_string line, int index, int space)
 {
-	t_string *colors;
+	t_string	*colors;
+	t_string	*tab;
 
 	if (g_infos[index]++)
 		 return (handle_error(DUPLICATE_COLOR, FAIL));
+	//tab = ft_split(line, ' ');
 	colors = ft_split(line + 2, ',');
+	//tmp = ;
 	g_world.colors[space] = rgb_to_int(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
+	
 	//free_space(colors);
 }
 
@@ -135,25 +169,31 @@ void    check_for_info(t_string line)
 		read_resolution(line);
 	else if (line[0] == 'N')
 		read_image(line, north_texture);
-	else if (line[0] == 'S' && line[1] == 'O')
-		read_image(line, south_texture);
+	else if (ft_strlen(line) >= 2 && line[0] == 'S' && line[1] == 'O')
+			read_image(line, south_texture);
 	else if (line[0] == 'W')
 		read_image(line, east_texture);
 	else if (line[0] == 'E')
 		read_image(line, west_texture);
-	else if (line[0] == 'S')
+	else if (line[0] == 'S' && line[1] != 'O')
 		read_image(line, sprite_texture);
 	else if (line[0] == 'F')
 		read_color(line, floor_color, ground);
 	else if (line[0] == 'C')
 		read_color(line, ceil_color, skybox);
+	//else
+	//	return (handle_error(INVALID_FROMAT,FAIL));
 }
 
-void    check_missing_info()
+int		is_info_full()
 {
-	for (int i = 0;i<9;i++)
+	int i;
+
+	i = -1;
+	while (++i < 9)
 		if (g_infos[i] == 0)
-			handle_error(MISSING_INFO, FAIL);
+			return (0);
+	return (1);
 }
 
 void	check_line(t_string line)
@@ -165,56 +205,63 @@ void	check_line(t_string line)
 		handle_error(INVALID_MAP, FAIL);
 }
 
-void	set_up_map(t_string file_name, int *cols, int *rows)
+void	set_up_map(t_string file_name)
 {
 	int 		fd;
 	int 		ret;
 	t_string	line;
 	t_string	*tab;
 	int			flag;
+	t_string	tmp;
 	fd = open(file_name, O_RDONLY);
 	//check_for_file(file_name);
-	*rows = 1;
-	*cols = 1;
+	g_world.rows = 1;
+	g_world.cols = 1;
 	flag = 0;
+	ret = 1;
 	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
-		line = ft_strtrim(line, " ", 0);
-		check_line(line);
-		if (line[0] == '1')
+		tmp = ft_strtrim(line, " ");
+		//printf("%s\n", line);
+		check_line(tmp);
+		if (*tmp == '1')
 		{
-			*cols = ft_strlen(line) > *cols ? ft_strlen(line) : *cols;
-			*rows += 1;
+			g_world.cols = ft_strlen(line) > g_world.cols ? ft_strlen(line) : g_world.cols;
+			g_world.rows += 1;
 			flag = 1;
 		}
-		else if (flag == 1)
+		else if (tmp[0] != 0 && flag == 1)
 			return (handle_error(INVALID_MAP, FAIL));
 	}
-	//printf("[%d | %d]\n", *cols, *rows);
+	//printf("[%d | %d]\n", g_world.cols, g_world.rows);
 	close(fd);
 }
 
-void	fill_map()
+void	allocate_map()
 {
-	ft_memset(&g_world.map, -1, g_world.rows * g_world.cols);
 	int i;
 	int j;
 
 	i = -1;
-	j = -1;
-	g_world.map = (char**)sf_malloc(sizeof(g_world.rows * sizeof(char*)));
+	g_world.map = (char**)sf_malloc((g_world.rows + 1) * sizeof(char*));
+	g_world.map[g_world.rows] = 0;
 	while (++i < g_world.rows)
 	{
-		j = -1;
-		g_world.map[i] = (char*)sf_malloc(sizeof(g_world.cols * sizeof(char)));
-		while (++j < g_world.cols)
-		{
-			//g_world.map[i][j] = -1;
-			printf("%c ", g_world.map[i][j]);
-		}
-		printf("\n");
+		g_world.map[i] = (char*)sf_malloc(g_world.cols + 1 * sizeof(char));
+		g_world.map[i][g_world.cols] = 0;	
 	}
+	memset(&g_world.map, 48, g_world.rows * g_world.cols);
+	i = -1;
+	j = -1;
+	/*while (++i < g_world.rows)
+	{
+		j = -1;
+		while (++j < g_world.cols)
+			g_world.map[i][j] = ' ';
+			//printf("%c", g_world.map[i][j]);
+		//printf("\n");
+	}*/
 }
 
 void    read_file(t_string file_name)
@@ -223,42 +270,53 @@ void    read_file(t_string file_name)
 	char *line;
 	int size;
 	char **tab;
-	int cols,rows;
+	t_string tmp;
 
-	set_up_map(file_name, &g_world.cols, &g_world.rows);
-	//fill_map();
-	printf("[%d | %d]\n", g_world.cols, g_world.rows);
-	
-	/*tab = ft_split(file_name, '.');
+	set_up_map(file_name);
+	allocate_map();
+	tab = ft_split(file_name, '.');
 	//if (ft_strcmp(tab[sizeof(tab) / sizeof(tab[0]) - 1] , "cub") != 0)
 	//    handle_error(INVALID_FILE_NAME, FAIL);
 	if ((fd = open(file_name, O_RDONLY)) < 0)
 		handle_error(NON_EXISTENECE_FILE, FAIL);
-	int j = 0;
+	int j = 1;
 	int i;
 	int x = 1;
 	//char *p = "wsne";
 	while (x > 0)
 	{
 		x = get_next_line(fd, &line);
-		if (*line == '0')
-			handle_error(INVALID_MAP, FAIL);
-		else if (*line == '1')
+		tmp = ft_strtrim(line, " ");
+		//if (*tmp == '1' && !is_info_full())
+		//	return (handle_error(MISSING_INFO, FAIL));
+		if (*tmp == '1')
 		{
 			tab = ft_split(line, ' ');
-			size = ft_strlen(line) / 2 + 1;
+			size = ft_strlen(line);
 			if (g_world.cols == 0)
 				g_world.cols += size;
-			i = -1;
+			i = 1;
 			while (++i < size)
-				g_game_map[j][i] = tab[i][0];
-			j++;
+				g_game_map[j++][i++] = tab[i][0];
 			g_world.rows++;
 		}
 		else
 			check_for_info(line);
 		free_space(&line);
 	}
-	close(fd);*/
-	// check_missing_info();
+	// /*
+	close(fd);
+	if (!is_info_full())
+		return(handle_error(MISSING_INFO, FAIL));
+// 	printf('
+// 	// ******  **     ** ******   ********  ****  *******  
+//  // **////**/**    /**/*////** /**/////  */// */**////** 
+// // **    // /**    /**/*   /** /**      /    /*/**    /**
+// //**       /**    /**/******  /*******    *** /**    /**
+// //**       /**    /**/*//// **/**////    /// */**    /**
+// //**    **/**    /**/*    /**/**       *   /*/**    ** 
+//  //****** //******* /******* /********/ **** /*******  
+//   //////   ///////  ///////  ////////  ////  ///////   
+//   ');
+
 }

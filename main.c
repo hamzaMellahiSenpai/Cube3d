@@ -184,7 +184,7 @@ void	snowFlack()
    this.radius = sqrt(random(pow(width / 2, 2)));
 }
 */
-#include "valg/malloc.h"
+//#include "valg/malloc.h"
 
 int   main(int ac, char **av)
 {

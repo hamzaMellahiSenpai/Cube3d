@@ -14,7 +14,7 @@
 # define HEADER_H
 # include <math.h>
 # include <stdlib.h>
-#include "valg/malloc.h"
+//include "./valg/malloc.h"
 # include <string.h>
 # include "mlx.h"
 # include <stdio.h>
@@ -91,7 +91,8 @@ enum							e_errors
 	Allocation_Failed,
 	PROCCESS_CANT_BE_CREATED,
 	INVALID_PATH,
-	INVALID_SPRITE_PLACEMENT
+	INVALID_SPRITE_PLACEMENT,
+	INVALID_RESOLUTION
 };
 
 enum							e_space
@@ -277,6 +278,7 @@ void			render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_h
 void			render_sprite(t_sprite sprite);
 float			dist(t_vector a, t_vector b);
 void			save_first_frame_in_bmp_file();
+int		tablen(void **tab);
 /*
 =======================================================
 */
@@ -344,6 +346,6 @@ void    free_all(int status);
 int		wall_at(t_vector coordinate);
 void		text(char *str, int x, int y, int color);
 int 	mouse(int x, int y);
-char	*ft_strtrim(char const *s1, char const *set, int index);
+char	*ft_strtrim(char const *s1, char const *set);
 /*=========================================================*/
 #endif
