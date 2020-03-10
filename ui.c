@@ -14,13 +14,7 @@
 
 void		text(char *str, int x, int y, int color)
 {
-	//char c;
-
-	//while (*str)
-	//{
-	//	c = *str++;
-		mlx_string_put(g_mlx, g_window, x, y, color, str);
-	//}
+	mlx_string_put(g_mlx, g_window, x, y, color, str);
 }
 
 float		deg_to_rad(int angle)
@@ -42,9 +36,8 @@ void		background(int color)
 	}
 }
 
-
-void	direct_line(int x, int start, int end, int color)
+void		direct_line(int x, int start, int end, int color)
 {
 	while (++start <= end)
-		put_pixel(new_vector(x,start), color);
+		put_pixel(new_vector(x, start), color);
 }

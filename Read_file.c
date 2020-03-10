@@ -156,14 +156,71 @@ void    check_missing_info()
 			handle_error(MISSING_INFO, FAIL);
 }
 
+void	check_line(t_string line)
+{
+	t_string usual;
+
+	usual = "1RNSWESFC";
+	if (!ft_strchr(usual, line[0]))
+		handle_error(INVALID_MAP, FAIL);
+}
+
+void	set_up_map(t_string file_name, int *cols, int *rows)
+{
+	int 		fd;
+	int 		ret;
+	t_string	line;
+	t_string	*tab;
+	int			flag;
+	fd = open(file_name, O_RDONLY);
+	//check_for_file(file_name);
+	*rows = 1;
+	*cols = 1;
+	flag = 0;
+	while (ret > 0)
+	{
+		ret = get_next_line(fd, &line);
+		line = ft_strtrim(line, " ", 0);
+		check_line(line);
+		if (line[0] == '1')
+		{
+			*cols = ft_strlen(line) > *cols ? ft_strlen(line) : *cols;
+			*rows += 1;
+			flag = 1;
+		}
+		else if (flag == 1)
+			return (handle_error(INVALID_MAP, FAIL));
+	}
+	//printf("[%d | %d]\n", *cols, *rows);
+	close(fd);
+}
+
+void	fill_map()
+{
+	int i;
+	int j;
+
+	i = -1;
+	j = -1;
+	while (++i < cols)
+	{
+
+	}
+}
+
 void    read_file(t_string file_name)
 {
 	int fd;
 	char *line;
 	int size;
 	char **tab;
+	int cols,rows;
 
-	tab = ft_split(file_name, '.');
+	set_up_map(file_name, &cols, &rows);
+	fill_map();
+	printf("[%d | %d]\n", g_world.cols, g_world.cols.rows);
+	
+	/*tab = ft_split(file_name, '.');
 	//if (ft_strcmp(tab[sizeof(tab) / sizeof(tab[0]) - 1] , "cub") != 0)
 	//    handle_error(INVALID_FILE_NAME, FAIL);
 	if ((fd = open(file_name, O_RDONLY)) < 0)
@@ -193,5 +250,6 @@ void    read_file(t_string file_name)
 			check_for_info(line);
 		free_space(&line);
 	}
+	close(fd);*/
 	// check_missing_info();
 }

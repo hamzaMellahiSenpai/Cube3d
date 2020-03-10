@@ -12,53 +12,19 @@
 
 #include "../header.h"
 
-// void    *sf_malloc(size_t size)
-// {
-//     void    *ptr;
-//     static  int i;
-
-//     if (!(ptr = malloc(size)))
-//         (handle_error(Allocation_Failed, FAIL));
-//     g_world.adresses[i] = ptr;
-//     g_world.adresses[i + 1] = 0;
-//     i++;
-//     return (ptr);
-// }
-
-// void    free_all(int status)
-// {
-//     int i;
-
-//     i = -1;
-//     while (g_world.adresses[++i] != 0)
-//         free(g_world.adresses[i]);
-//     exit(status);
-// }
-
-void    print_lst(t_lst *lst)
+void	*sf_malloc(size_t size)
 {
-    while (lst != NULL)
-    {
-        printf("%s\n", (char*)lst->content);
-        lst = lst->next;
-    }
+	void	*ptr;
+	t_lst	*lst;
+
+	if (!(ptr = malloc(size)))
+		(handle_error(Allocation_Failed, FAIL));
+	lst = new_lst(ptr);
+	return (ptr);
 }
 
-void    *sf_malloc(size_t size)
+void	free_all(int status)
 {
-    void    *ptr;
-
-    if (!(ptr = malloc(size)))
-        (handle_error(Allocation_Failed, FAIL));
-    t_lst *lst = new_lst(ptr);
-    push_back(&g_world.adresses, lst);
-    //print_lst(g_world.adresses);
-    printf("[%s]\n", (char*)lst->content);
-    return (ptr);
-}
-
-void    free_all(int status)
-{
-    deleteList(&g_world.adresses);
-    exit(status);
+	deletelist(&g_world.adresses);
+	exit(status);
 }

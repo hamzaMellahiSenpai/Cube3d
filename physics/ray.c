@@ -109,18 +109,5 @@ void	cast(t_ray *a, int col)
 	}
 	ray.distance = dist(A, g_world.player.position);
 	*a = ray;
-	render3D(ray, col, A, is_hor_hit);
-}
-
-void	draw_sprites()
-{
-	//sort_sprites(&g_world.sprites, 1);
-	int i;
-
-	i = -1;
-	while (i++ < 1)
-	{
-		//float angle = atan2(g_world.sprites[i].position.y - g_world.player.position.y);
-		
-	}
+	render_walls(ray, col, A, is_hor_hit);
 }

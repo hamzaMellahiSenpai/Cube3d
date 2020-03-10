@@ -184,6 +184,7 @@ void	snowFlack()
    this.radius = sqrt(random(pow(width / 2, 2)));
 }
 */
+#include "valg/malloc.h"
 
 int   main(int ac, char **av)
 {
@@ -199,7 +200,7 @@ int   main(int ac, char **av)
 	g_mlx = mlx_init();
 	read_file(av[1]);
 	//init_game();
-	printf("%d | %d\n", g_world.rows, g_world.cols);
+	/*printf("%d | %d\n", g_world.rows, g_world.cols);
 	setup();
 	if (ac == 3 && ft_strcmp(av[2], "--save") == 0)
 	{
@@ -209,5 +210,7 @@ int   main(int ac, char **av)
 	mlx_loop_hook(g_mlx, update, (void*)0);
 	mlx_hook(g_window, 6,0, mouse, (void*)0);
 	mlx_loop(g_mlx);
+	leakcheck();
+	system("valgrind ./a.out");*/
 	return 0;
 }

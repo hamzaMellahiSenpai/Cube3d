@@ -12,13 +12,12 @@
 
 #include "header.h"
 
-
 int		shadow(int color, double distance)
 {
-	int r;
-	int g;
-	int b;
-	float fact;
+	int		r;
+	int		g;
+	int		b;
+	float	fact;
 
 	fact = 100 / distance;
 	b = (color & 0xff) * fact;
@@ -29,5 +28,5 @@ int		shadow(int color, double distance)
 	color = color >> 8;
 	r = (color & 0xff) * fact;
 	r = r > (color & 0xff) ? (color & 0xff) : r;
-	return (rgb_to_int(r,g,b));
+	return (rgb_to_int(r, g, b));
 }

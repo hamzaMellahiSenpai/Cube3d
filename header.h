@@ -14,6 +14,7 @@
 # define HEADER_H
 # include <math.h>
 # include <stdlib.h>
+#include "valg/malloc.h"
 # include <string.h>
 # include "mlx.h"
 # include <stdio.h>
@@ -266,14 +267,10 @@ int							g_bc[2];
 void	check_for_file(t_string file_name);
 t_vector		new_vector(float x, float y);
 t_shape			new_shape(float x, float y);
-t_vector		add_vectors(void *a, void *b);
-void			print_vector(t_vector vector);
-t_vector		substract_vectors(void *a, void *b, int type);
-void			update_field_of_view();
-float			vector_len(t_vector vec);
 void			add_to_vector(void *a, void *b, char type);
-t_vector		mult_vectors(void *a, void *b, int type);
-t_shape			to_shape(t_vector a);
+t_vector		add_vectors(t_vector *a, t_vector *b);
+void			print_vector(t_vector vector);
+void			update_field_of_view();
 void			direct_line(int x, int start, int end, int color);
 void			render_texture(t_image texture, int WALL_HEIGHT, int col, t_vector Wall_hit, int is_hor_hit, int distance);
 void			render_sprite(t_sprite sprite);
@@ -295,10 +292,9 @@ void			background(int color);
 void			get_delta_time();
 float			norm_angle(float angle);
 int				wall_at(t_vector coordinate);
-void			render(t_ray ray, t_vector a);
 void			cast(t_ray *ray, int col);
 t_ray			new_ray(float ray_angle);
-void			render3D(t_ray ray, int col, t_vector wall_hit, int is_hor_hit);
+void			render_walls(t_ray ray, int col, t_vector wall_hit, int is_hor_hit);
 float			modulo(float num, float divisor);
 void			circle(t_vector a, int radius, int color);
 /*================= Get Next Line function  ====================*/
@@ -332,7 +328,7 @@ int				key_released(int key_code, void *p);
 /*=========================================================*/
 void			push_back(t_lst **alst, t_lst *new);
 t_lst			*new_lst(void *content);
-void			deleteList(t_lst** head_ref);
+void			deletelist(t_lst** head_ref);
 t_pair			*make_pair(void *a, void *b);
 void	lstiter(t_lst *lst, void *(*f)(void *content));
 void			push_front(t_lst** head_ref, t_lst* new);
@@ -347,5 +343,6 @@ void    free_all(int status);
 int		wall_at(t_vector coordinate);
 void		text(char *str, int x, int y, int color);
 int 	mouse(int x, int y);
+char	*ft_strtrim(char const *s1, char const *set, int index);
 /*=========================================================*/
 #endif

@@ -24,34 +24,36 @@ void	push_back(t_lst **alst, t_lst *new)
 	ptr->next = new;
 }
 
-void push_front(t_lst** head_ref, t_lst *new) 
-{ 
-    new->next = *head_ref;
-    *head_ref = new;
+void	push_front(t_lst **head_ref, t_lst *new)
+{
+	new->next = *head_ref;
+	*head_ref = new;
 }
 
 t_lst	*new_lst(void *content)
 {
 	t_lst	*newlist;
 
-	newlist = malloc(sizeof(t_lst));
+	if (!(newlist = malloc(sizeof(t_lst))))
+		(handle_error(Allocation_Failed, FAIL));
 	newlist->content = content;
 	newlist->next = NULL;
+	push_back(&g_world.adresses, newlist);
 	return (newlist);
 }
 
-void deleteList(t_lst** head_ref)
-{  
-	t_lst* current;
-	t_lst* next;
+void	deletelist(t_lst **head_ref)
+{
+	t_lst	*current;
+	t_lst	*next;
 
 	current = *head_ref;
 	while (current != NULL)
-	{  
+	{
 		next = current->next;
 		free(current);
 		current = next;
-	}  
+	}
 	*head_ref = NULL;
 }
 
@@ -60,20 +62,7 @@ t_pair	*make_pair(void *a, void *b)
 	t_pair *pair;
 
 	pair = sf_malloc(sizeof(t_pair));
-	pair->a = a; //Leakos
+	pair->a = a;
 	pair->b = b;
-	//printf("%d || %s\n", (*(int*)pair->a), (t_string)pair->b);
 	return (pair);
-}
-
-void	lstiter(t_lst *lst, void  *(*f)(void *))
-{
-	t_lst	*ptr;
-
-	ptr = lst;
-	while (ptr)
-	{
-		f(ptr->content);
-		ptr = ptr->next;
-	}
 }
