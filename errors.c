@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/24 09:51:10 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/08 05:48:31 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/10 23:54:20 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		handle_error(int error_index, int status)
 {
-	t_string messages[12];
+	t_string messages[14];
 
 	messages[0] = "Invalid file name!";
 	messages[1] = "Missing info";
@@ -29,6 +29,7 @@ void		handle_error(int error_index, int status)
 	messages[10] = "INVALID_PATH";
 	messages[11] = "INVALID_SPRITE_PLACEMENT";
 	messages[12] = "INVALID_RESOLUTION";
+	messages[13] = "DUPLICATION_PLAYER";
 	perror(messages[error_index]);
 	free_all(status);
 }

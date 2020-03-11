@@ -4,6 +4,8 @@
         "header.h": "c",
         "math.h": "c",
         "malloc.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "__locale": "c",
+        "locale": "c"
     }
 }

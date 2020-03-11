@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/22 13:55:39 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/10 03:56:53 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/11 01:10:01 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,17 +130,13 @@ void	load_sprite(t_string line, int index)
 	g_world.sprites[index - 4 + g_world.numofsprites] = sprite;
 	load_image(index - 4 +  g_world.numofsprites, sprite.path, SPRITE);
 	//printf("[%d | %d | %d | %d]\n", sprite.bc, sprite.anim.nofframes, sprite.anim.is_loop, sprite.anim.fps);
-	fillCell(sprite.pos_in_map.x,sprite.pos_in_map.y,sprite.type);
+	//fillCell(sprite.pos_in_map.x,sprite.pos_in_map.y,sprite.type);
 	g_world.numofsprites++;
 	printf("%s has been loaded\n", sprite.path);
 }
 
 void    read_image(t_string line, int index)
 {
-	t_string *tab;
-	t_sprite sprite;
-	t_string *tab2;
-
 	if (index <= 3)
 		load_texture(line, index);
 	else
@@ -201,8 +197,9 @@ void	check_line(t_string line)
 	t_string usual;
 
 	usual = "1RNSWESFC";
-	if (!ft_strchr(usual, line[0]))
-		handle_error(INVALID_MAP, FAIL);
+	while (*line)
+		if (!ft_strchr(usual, *line++))
+			handle_error(INVALID_MAP, FAIL);
 }
 
 void	set_up_map(t_string file_name)
@@ -215,26 +212,22 @@ void	set_up_map(t_string file_name)
 	t_string	tmp;
 	fd = open(file_name, O_RDONLY);
 	//check_for_file(file_name);
-	g_world.rows = 1;
-	g_world.cols = 1;
+	g_world.rows = 2;
 	flag = 0;
 	ret = 1;
 	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
 		tmp = ft_strtrim(line, " ");
-		//printf("%s\n", line);
-		check_line(tmp);
 		if (*tmp == '1')
 		{
 			g_world.cols = ft_strlen(line) > g_world.cols ? ft_strlen(line) : g_world.cols;
 			g_world.rows += 1;
 			flag = 1;
 		}
-		else if (tmp[0] != 0 && flag == 1)
+		else if (*tmp != 0 && flag == 1)
 			return (handle_error(INVALID_MAP, FAIL));
 	}
-	//printf("[%d | %d]\n", g_world.cols, g_world.rows);
 	close(fd);
 }
 
@@ -248,20 +241,50 @@ void	allocate_map()
 	g_world.map[g_world.rows] = 0;
 	while (++i < g_world.rows)
 	{
-		g_world.map[i] = (char*)sf_malloc(g_world.cols + 1 * sizeof(char));
-		g_world.map[i][g_world.cols] = 0;	
-	}
-	memset(&g_world.map, 48, g_world.rows * g_world.cols);
-	i = -1;
-	j = -1;
-	/*while (++i < g_world.rows)
-	{
 		j = -1;
+		g_world.map[i] = (char*)sf_malloc(g_world.cols + 1 * sizeof(char));
+		g_world.map[i][g_world.cols] = 0;
 		while (++j < g_world.cols)
-			g_world.map[i][j] = ' ';
-			//printf("%c", g_world.map[i][j]);
-		//printf("\n");
-	}*/
+			g_game_map[i][j] = ' ';
+	}
+	printf("[%d | %d]\n", g_world.rows, g_world.cols);
+}
+
+void	get_player_pos(t_string line,int row)
+{
+	t_string	str;
+	int			col;
+
+	str = "NSWE";
+	col = 0;
+	while (*str)
+	{
+		if (ft_strchr(line, *str))
+		{
+			if (g_infos[player_position]++)
+				return (handle_error(DUPLICATE_PLAYER, FAIL));
+			else
+			{
+				while (*line && *line != *str)
+				{
+					col++;
+					line++;
+				}
+				PLAYERPOS = new_vector(BLOCK_SIZE * col + BLOCK_SIZE / 2, BLOCK_SIZE * row + BLOCK_SIZE / 2);
+				if (*str == 'N')
+					g_world.player.rotation.angle = 90;
+				else if (*str == 'S')
+					g_world.player.rotation.angle = -90;
+				else if (*str == 'W')
+						g_world.player.rotation.angle = 0;
+				else
+					g_world.player.rotation.angle = 180;
+				//print_vector(PLAYERPOS);
+				//printf("[%d|%d]\n", col, row);
+			}
+		}
+		str++;
+	}
 }
 
 void    read_file(t_string file_name)
@@ -291,32 +314,60 @@ void    read_file(t_string file_name)
 		//	return (handle_error(MISSING_INFO, FAIL));
 		if (*tmp == '1')
 		{
-			tab = ft_split(line, ' ');
 			size = ft_strlen(line);
-			if (g_world.cols == 0)
-				g_world.cols += size;
-			i = 1;
-			while (++i < size)
-				g_game_map[j++][i++] = tab[i][0];
-			g_world.rows++;
+			get_player_pos(line, j);
+			i = 0;
+			while (++i < g_world.cols)
+			{
+				g_game_map[j][i] = i < size ? line[i] : ' ';
+				if (!ft_strchr("1 ", g_game_map[j][i]))
+				{
+					
+					if (g_game_map[j][i + 1] == ' ' || g_game_map[j][i - 1] == ' ' || 
+						g_game_map[j + 1][i] == ' ' || g_game_map[j + 1][i] == ' ')
+					{
+						printf("%d|%d\n", i, j);
+						printf("%c | %c |%c |%c\n", g_game_map[j][i + 1], g_game_map[j + 1][i], g_game_map[j][i + 1], g_game_map[j + 1][i] == ' ');
+						return (handle_error(INVALID_MAP, FAIL));
+					}
+				}
+				//printf("%c", g_game_map[j][i]);
+			}
+			j++;
 		}
 		else
 			check_for_info(line);
 		free_space(&line);
 	}
-	// /*
+	
+	i = -1;
+	while (++i < g_world.rows)
+	{
+		j = -1;
+		while (++j < g_world.cols)
+			printf("%c", g_game_map[i][j]);
+		printf("\n");
+	}
 	close(fd);
 	if (!is_info_full())
 		return(handle_error(MISSING_INFO, FAIL));
-// 	printf('
-// 	// ******  **     ** ******   ********  ****  *******  
-//  // **////**/**    /**/*////** /**/////  */// */**////** 
-// // **    // /**    /**/*   /** /**      /    /*/**    /**
-// //**       /**    /**/******  /*******    *** /**    /**
-// //**       /**    /**/*//// **/**////    /// */**    /**
-// //**    **/**    /**/*    /**/**       *   /*/**    ** 
-//  //****** //******* /******* /********/ **** /*******  
-//   //////   ///////  ///////  ////////  ////  ///////   
-//   ');
+// 	printf("\n\
+//         CCCCCCCCCCCCCUUUUUUUU     UUUUUUUUBBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD \n\
+//      CCC::::::::::::CU::::::U     U::::::UB::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD  \n\
+//    CC:::::::::::::::CU::::::U     U::::::UB::::::BBBBBB:::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
+//   C:::::CCCCCCCC::::CUU:::::U     U:::::UUBB:::::B     B:::::BEE::::::EEEEEEEEE::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
+//  C:::::C       CCCCCC U:::::U     U:::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E::::::EEEEEEEEEE            33333333:::::3   D:::::D     D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B:::::::::::::BB    E:::::::::::::::E            3:::::::::::3    D:::::D     D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E:::::::::::::::E            33333333:::::3   D:::::D     D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E::::::EEEEEEEEEE                    3:::::3  D:::::D     D:::::D\n\
+// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
+//  C:::::C       CCCCCC U::::::U   U::::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D \n\
+//   C:::::CCCCCCCC::::C U:::::::UUU:::::::U BB:::::BBBBBB::::::BEE::::::EEEEEEEE:::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
+//    CC:::::::::::::::C  UU:::::::::::::UU  B:::::::::::::::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
+//      CCC::::::::::::C    UU:::::::::UU    B::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD   \n\
+//         CCCCCCCCCCCCC      UUUUUUUUU      BBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD\n\
+// 		");
 
 }

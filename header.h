@@ -6,7 +6,7 @@
 /*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/10 03:35:56 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/10 23:38:44 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ enum							e_errors
 	PROCCESS_CANT_BE_CREATED,
 	INVALID_PATH,
 	INVALID_SPRITE_PLACEMENT,
-	INVALID_RESOLUTION
+	INVALID_RESOLUTION,
+	DUPLICATE_PLAYER
 };
 
 enum							e_space
