@@ -24,7 +24,7 @@ int		key_pressed(int key_code, void *p)
 {
 	g_is_keypressed = 1;
 	(void)p;
-	if (key_code == CTRL_KEY)
+	/*if (key_code == CTRL_KEY)
 	{
 		int i = -1;
 		while (++i < g_world.numofsprites)
@@ -34,7 +34,7 @@ int		key_pressed(int key_code, void *p)
 				break;
 			}
 	}
-	else if (key_code == EXIT_KEY)
+	else*/ if (key_code == EXIT_KEY)
 	{
 		kill(pid, SIGKILL);
 		free_all(UNCOMPLETED);

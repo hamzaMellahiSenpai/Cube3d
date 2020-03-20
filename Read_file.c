@@ -97,7 +97,7 @@ void	load_texture(t_string line, int index)
 		return (handle_error(INVALID_PATH, FAIL));
 	path = ft_strjoin(tab[1], ".xpm", 3);
 	load_image(index, path, TEXTURE);
-	printf("%s has been loaded\n", path);
+	//printf("%s has been loaded\n", path);
 }
 
 void	load_sprite(t_string line, int index)
@@ -211,23 +211,24 @@ void	set_up_map(t_string file_name)
 	int			flag;
 	t_string	tmp;
 	fd = open(file_name, O_RDONLY);
-	//check_for_file(file_name);
+	check_for_file(file_name);
 	g_world.rows = 2;
 	flag = 0;
 	ret = 1;
 	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
-		tmp = ft_strtrim(line, " ");
+		tmp = ft_strtrim(line, " \t");
 		if (*tmp == '1')
 		{
 			g_world.cols = ft_strlen(line) > g_world.cols ? ft_strlen(line) : g_world.cols;
-			g_world.rows += 1;
+			g_world.rows++;
 			flag = 1;
 		}
 		else if (*tmp != 0 && flag == 1)
 			return (handle_error(INVALID_MAP, FAIL));
 	}
+	g_world.cols += 2;
 	close(fd);
 }
 
@@ -295,44 +296,43 @@ void    read_file(t_string file_name)
 	char **tab;
 	t_string tmp;
 
+	check_for_file(file_name);
 	set_up_map(file_name);
 	allocate_map();
 	tab = ft_split(file_name, '.');
+	fd = open(file_name, O_RDONLY);
 	//if (ft_strcmp(tab[sizeof(tab) / sizeof(tab[0]) - 1] , "cub") != 0)
 	//    handle_error(INVALID_FILE_NAME, FAIL);
-	if ((fd = open(file_name, O_RDONLY)) < 0)
-		handle_error(NON_EXISTENECE_FILE, FAIL);
 	int j = 1;
 	int i;
 	int x = 1;
-	//char *p = "wsne";
 	while (x > 0)
 	{
 		x = get_next_line(fd, &line);
-		tmp = ft_strtrim(line, " ");
+		tmp = ft_strtrim(line, " \t");
+		//printf("[%c]%s\n", tmp[0], line);
 		//if (*tmp == '1' && !is_info_full())
 		//	return (handle_error(MISSING_INFO, FAIL));
 		if (*tmp == '1')
 		{
 			size = ft_strlen(line);
 			get_player_pos(line, j);
-			i = 0;
+			i = 1;
 			while (++i < g_world.cols)
 			{
 				g_game_map[j][i] = i < size ? line[i] : ' ';
 				if (!ft_strchr("1 ", g_game_map[j][i]))
 				{
-					
 					if (g_game_map[j][i + 1] == ' ' || g_game_map[j][i - 1] == ' ' || 
-						g_game_map[j + 1][i] == ' ' || g_game_map[j + 1][i] == ' ')
+	 					g_game_map[j + 1][i] == ' ' || g_game_map[j + 1][i] == ' ')
 					{
 						printf("%d|%d\n", i, j);
 						printf("%c | %c |%c |%c\n", g_game_map[j][i + 1], g_game_map[j + 1][i], g_game_map[j][i + 1], g_game_map[j + 1][i] == ' ');
 						return (handle_error(INVALID_MAP, FAIL));
 					}
 				}
-				//printf("%c", g_game_map[j][i]);
 			}
+			printf("%s\n", g_game_map[j]);
 			j++;
 		}
 		else
@@ -349,25 +349,25 @@ void    read_file(t_string file_name)
 		printf("\n");
 	}
 	close(fd);
-	if (!is_info_full())
-		return(handle_error(MISSING_INFO, FAIL));
-// 	printf("\n\
-//         CCCCCCCCCCCCCUUUUUUUU     UUUUUUUUBBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD \n\
-//      CCC::::::::::::CU::::::U     U::::::UB::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD  \n\
-//    CC:::::::::::::::CU::::::U     U::::::UB::::::BBBBBB:::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
-//   C:::::CCCCCCCC::::CUU:::::U     U:::::UUBB:::::B     B:::::BEE::::::EEEEEEEEE::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
-//  C:::::C       CCCCCC U:::::U     U:::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E::::::EEEEEEEEEE            33333333:::::3   D:::::D     D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B:::::::::::::BB    E:::::::::::::::E            3:::::::::::3    D:::::D     D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E:::::::::::::::E            33333333:::::3   D:::::D     D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E::::::EEEEEEEEEE                    3:::::3  D:::::D     D:::::D\n\
-// C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
-//  C:::::C       CCCCCC U::::::U   U::::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D \n\
-//   C:::::CCCCCCCC::::C U:::::::UUU:::::::U BB:::::BBBBBB::::::BEE::::::EEEEEEEE:::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
-//    CC:::::::::::::::C  UU:::::::::::::UU  B:::::::::::::::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
-//      CCC::::::::::::C    UU:::::::::UU    B::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD   \n\
-//         CCCCCCCCCCCCC      UUUUUUUUU      BBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD\n\
-// 		");
-
+	//if (!is_info_full())
+	//	return(handle_error(MISSING_INFO, FAIL));
+	/*printf("\n\
+        CCCCCCCCCCCCCUUUUUUUU     UUUUUUUUBBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD \n\
+     CCC::::::::::::CU::::::U     U::::::UB::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD  \n\
+   CC:::::::::::::::CU::::::U     U::::::UB::::::BBBBBB:::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
+  C:::::CCCCCCCC::::CUU:::::U     U:::::UUBB:::::B     B:::::BEE::::::EEEEEEEEE::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
+ C:::::C       CCCCCC U:::::U     U:::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D\n\
+C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
+C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E::::::EEEEEEEEEE            33333333:::::3   D:::::D     D:::::D\n\
+C:::::C               U:::::D     D:::::U   B:::::::::::::BB    E:::::::::::::::E            3:::::::::::3    D:::::D     D:::::D\n\
+C:::::C               U:::::D     D:::::U   B::::BBBBBB:::::B   E:::::::::::::::E            33333333:::::3   D:::::D     D:::::D\n\
+C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E::::::EEEEEEEEEE                    3:::::3  D:::::D     D:::::D\n\
+C:::::C               U:::::D     D:::::U   B::::B     B:::::B  E:::::E                              3:::::3  D:::::D     D:::::D\n\
+ C:::::C       CCCCCC U::::::U   U::::::U   B::::B     B:::::B  E:::::E       EEEEEE                 3:::::3  D:::::D    D:::::D \n\
+  C:::::CCCCCCCC::::C U:::::::UUU:::::::U BB:::::BBBBBB::::::BEE::::::EEEEEEEE:::::E     3333333     3:::::3DDD:::::DDDDD:::::D  \n\
+   CC:::::::::::::::C  UU:::::::::::::UU  B:::::::::::::::::B E::::::::::::::::::::E     3::::::33333::::::3D:::::::::::::::DD \n\
+     CCC::::::::::::C    UU:::::::::UU    B::::::::::::::::B  E::::::::::::::::::::E     3:::::::::::::::33 D::::::::::::DDD   \n\
+        CCCCCCCCCCCCC      UUUUUUUUU      BBBBBBBBBBBBBBBBB   EEEEEEEEEEEEEEEEEEEEEE      333333333333333   DDDDDDDDDDDDD\n\
+		");
+*/
 }
