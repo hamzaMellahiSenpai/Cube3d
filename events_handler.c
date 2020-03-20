@@ -48,15 +48,15 @@ int		key_pressed(int key_code, void *p)
 	{
 		if (g_world.player.offset >= 0 && g_world.player.offset < SHEIGHT)
 			g_world.player.offset -= 30;
-	}else if (key_code == SPACE_KEY)
-		jump();
+	}//else if (key_code == SPACE_KEY)
+	//	jump();
 	else if (key_code == RIGHT_ARROW)
 		g_world.player.turnDirection = 1;
 	else if (key_code == LEFT_ARROW)
 		g_world.player.turnDirection = -1;
-	else if (key_code == W_KEY)
+	else if (key_code == K_W)
 		g_world.player.walkDirection = 1;
-	else if (key_code == S_KEY)
+	else if (key_code == K_S)
 		g_world.player.walkDirection = -1;		
 	return (1);
 }
@@ -68,9 +68,9 @@ int		key_released(int key_code, void *p)
 		g_world.player.turnDirection = 0;
 	else if (key_code == LEFT_ARROW)
 		g_world.player.turnDirection = 0;
-	else if (key_code == W_KEY)
+	else if (key_code == K_W)
 		g_world.player.walkDirection = 0;
-	else if (key_code == S_KEY)
+	else if (key_code == K_S)
 		g_world.player.walkDirection = 0;
 	return (1);
 }

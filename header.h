@@ -12,6 +12,11 @@
 
 #ifndef HEADER_H
 # define HEADER_H
+# if defined(__APPLE__)
+#  include "minilibx/key_macos.h"
+# else
+#  include "minilibx/key_linux.h"
+# endif
 # include <math.h>
 # include <stdlib.h>
 //include "./valg/malloc.h"
@@ -22,17 +27,6 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
-# define RIGHT_ARROW 124
-# define LEFT_ARROW 123
-# define UP_ARROW 126
-# define DOWN_ARROW 125
-# define CTRL_KEY 256
-# define EXIT_KEY 53
-# define SPACE_KEY 49
-# define W_KEY 13
-# define A_KEY 0
-# define D_KEY 2
-# define S_KEY 1
 # define SWIDTH g_screen.width
 # define SHEIGHT g_screen.height
 # define VIEW_ANGLE (float)1.0472
