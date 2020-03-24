@@ -15,12 +15,10 @@
 static	int			wordscount(const char *s, char c)
 {
 	int count;
-	int i;
 	int mot;
 
 	count = 0;
 	mot = 0;
-	i = 0;
 	if (!s)
 		return (0);
 	while (*s != '\0')

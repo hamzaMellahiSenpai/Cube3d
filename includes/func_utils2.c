@@ -58,7 +58,7 @@ char		*ft_strjoin(char const *s1, char const *s2, int index)
 	i = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	if (!(s12 = malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1)))
+	if (!(s12 = sf_malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1)))
 		return (NULL);
 	while (s1[i])
 	{
@@ -89,7 +89,7 @@ char		*ft_strcpy(char *dest, const char *src)
 	return (dest + i);
 }
 
-char		*ft_strtrim(char const *s, char const *set)
+char		*trim(char const *s, char const *set)
 {
         int             debut;
         int             fin;

@@ -39,12 +39,11 @@ void	fill_header(unsigned char **header, int imagesize)
 	ft_memcpy(*header + 34, &imagesize, 4);
 }
 
-void	fill_buf(unsigned char **buf, int width_in_bytes, int imagesize)
+void	fill_buf(unsigned char **buf, int width_in_bytes)
 {
 	int row;
 	int col;
 	int color;
-	int fd;
 
 	row = SHEIGHT;
 	col = -1;
@@ -75,7 +74,7 @@ void	save_first_frame_in_bmp_file(void)
 	fill_header(&header, imagesize);
 	buf = sf_malloc(imagesize);
 	fd = open("img.bmp", O_CREAT | O_RDWR, S_IWUSR | S_IRUSR);
-	fill_buf(&buf, width_in_bytes, imagesize);
+	fill_buf(&buf, width_in_bytes);
 	write(fd, header, 54);
 	write(fd, buf, imagesize);
 	close(fd);

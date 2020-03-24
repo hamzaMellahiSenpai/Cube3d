@@ -24,6 +24,7 @@ int		key_pressed(int key_code, void *p)
 {
 	g_is_keypressed = 1;
 	(void)p;
+	//printf("%d\n", key_code);
 	/*if (key_code == CTRL_KEY)
 	{
 		int i = -1;

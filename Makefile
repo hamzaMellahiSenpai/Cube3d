@@ -23,6 +23,6 @@ all:
 	#@gcc -g rendering.c lst.c effects.c events_handler.c ui.c shapes.c main.c maths.c player.c vector.c ray.c Read_file.c ft_split.c func_utils.c func_utils2.c get_next_line.c errors.c -D BUFFER_SIZE=1 $(MLX) -fsanitize=address
 	#./a.out "l.cub" -D BUFFER_SIZE=1 $(MLX) -fsanitize=address
 	#gcc -g -D L_C=N *.c  */*.c -D BUFFER_SIZE=1 $(MLX) -fsanitize=address
-	gcc -g *.c  */*.c -D BUFFER_SIZE=1 $(MLX) #-fsanitize=address
+	gcc -g *.c  */*.c -D BUFFER_SIZE=1 $(FLAGS) $(MLX) -fsanitize=address
 clean:
 	rm -rf *.o

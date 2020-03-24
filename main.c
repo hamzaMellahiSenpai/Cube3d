@@ -80,12 +80,10 @@ void    setup()
 	g_p = (int *)mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.size_line, &img.endian);
 	g_world.wall_rays = sf_malloc(sizeof(t_ray) * (g_screen.width + 1));
 	mlx_string_put(g_mlx, g_window, SWIDTH /2 , SHEIGHT /2 , 0xff, "hello");
-	show_sprites();
 	draw_map();
 	show_sprites();
 	update_field_of_view();
 	mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);
-	//mlx_put_image_to_window(g_mlx, g_window, img.img , 0, 0);		
 }
 
 void	draw_cursor()
@@ -112,12 +110,12 @@ int    update(int key)
 	int j;
 	float f;
 	int i = 0;
-	if (mlx_hook(g_window, 2, 0, key_pressed, (void*)0))
-	{
+	//if (mlx_hook(g_window, 2, (1L << 0), key_pressed, (void*)0))
+	//{
 		update_field_of_view();
 		update_sprites();
-	}
-	mlx_hook(g_window, 3, 0, key_released, (void*)0);
+	//}
+	mlx_hook(g_window, 3, (1L << 0), key_released, (void*)0);
 	update_player();
 	show_sprites();
 	float ystep = g_world.sprites[0].img.height / (SHEIGHT / 3);
@@ -193,11 +191,11 @@ int   main(int ac, char **av)
 		perror("NOT VALID NUMBER OF ARGS");
 		exit(FAIL);
 	}
-	g_frame = 0;
 	g_world.rows = 0;
 	g_world.cols = 0;
 	g_world.numofsprites = 0;
 	g_mlx = mlx_init();
+	init_errors();
 	read_file(av[1]);
 	//init_game();
 	//printf("%d | %d\n", g_world.rows, g_world.cols);
@@ -205,12 +203,15 @@ int   main(int ac, char **av)
 	if (ac == 3 && ft_strcmp(av[2], "--save") == 0)
 	{
 		save_first_frame_in_bmp_file();
-		free_all(UNCOMPLETED);
+		//free_all(UNCOMPLETED);
 	}
 	mlx_loop_hook(g_mlx, update, (void*)0);
 	mlx_hook(g_window, 6,0, mouse, (void*)0);
+	mlx_hook(g_window, 2, (1L << 0), key_pressed, (void*)0);
+	mlx_hook(g_window, 3, (1L << 0), key_released, (void*)0);
+	//mlx_hook(g_window, 2, (1L << 0), update, (void*)0);
 	mlx_loop(g_mlx);
 //	leakcheck();
-	system("valgrind ./a.out");
+	//system("valgrind ./a.out");
 	return 0;
 }

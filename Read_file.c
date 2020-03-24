@@ -42,22 +42,13 @@ int		isnumber(t_string str)
 void    read_resolution(t_string line)
 {
 	t_string *tab;
-	t_string tmp;
 
 	if (g_infos[resolution]++)
 		return (handle_error(DUPLICATE_RESOLUTION, FAIL));
-	tab = ft_split(line, ' ');
-	//printf("[%d]\n", tablen((void**)tab));
-	if (tablen((void**)tab) != 3)
-		return (handle_error(INVALID_RESOLUTION, FAIL));
-	tmp = ft_strtrim(tab[1], " ");
-	if (!isnumber(tmp))
-		return (handle_error(INVALID_RESOLUTION, FAIL));
-	g_screen.width = ft_atoi(tmp);
-	tmp = ft_strtrim(tab[2], " ");
-	if (!isnumber(tmp))
-		return (handle_error(INVALID_RESOLUTION, FAIL));
-	g_screen.height = ft_atoi(tmp);
+	tab = ft_split(line + 1, ' ');
+	validate_args(&tab, 2);
+	g_screen.width = ft_atoi(tab[0]);
+	g_screen.height = ft_atoi(tab[1]);
 }
 
 void	load_image(int i, t_string path, int type)
@@ -78,7 +69,6 @@ void	load_image(int i, t_string path, int type)
 
 void	fillCell(int x, int y, char type)
 {
-	printf("[%d] | [%d] | [%c]\n",x,y,g_game_map[y][x]);
 	if (g_game_map[y][x] == '0')
 		g_game_map[y][x] = type;
 	else
@@ -105,16 +95,15 @@ void	load_sprite(t_string line, int index)
 	t_string	*tab;
 	t_sprite	sprite;
 	t_string	*tab2;
-	t_string	tmp;
 
 	tab = ft_split(line, '|');
 	tab2 = ft_split(tab[0], ' ');
+	if (tablen((void**)tab2) != 2)
+		return (handle_error(INVALID_SPRITE_ARG, FAIL));
 	sprite.path = ft_strjoin(tab2[1], ".xpm", 3);
 	sprite.type = tab2[0][1];
-	tmp = ft_strtrim(tab[3], " ");
-	//if (ft_isdigit(tmp))
-//		return (handle_error(INVALID_SPRITE_INFO, FAIL));
-	sprite.anim.isPlayOnAwake = ft_atoi(tmp);
+	validate_args(&tab, 9);
+	sprite.anim.isPlayOnAwake = ft_atoi(tab[3]);
 	sprite.anim.is_running = sprite.anim.isPlayOnAwake ? 1 : 0;
 	sprite.anim.nofframes = ft_atoi(tab[4]);
 	sprite.anim.is_loop = ft_atoi(tab[5]);
@@ -130,9 +119,25 @@ void	load_sprite(t_string line, int index)
 	g_world.sprites[index - 4 + g_world.numofsprites] = sprite;
 	load_image(index - 4 +  g_world.numofsprites, sprite.path, SPRITE);
 	//printf("[%d | %d | %d | %d]\n", sprite.bc, sprite.anim.nofframes, sprite.anim.is_loop, sprite.anim.fps);
+	print_vector(sprite.pos_in_map);
 	//fillCell(sprite.pos_in_map.x,sprite.pos_in_map.y,sprite.type);
 	g_world.numofsprites++;
-	printf("%s has been loaded\n", sprite.path);
+}
+
+void validate_args(t_string **args, int nargs)
+{
+	int i;
+
+	i = 1;
+	while((*args)[i])
+	{
+		(*args)[i] = trim((*args)[i], " ");
+		if (!isnumber((*args)[i]))
+			return (handle_error(INVALID_SPRITE_ARG, FAIL));
+		i++;
+	}
+	if (nargs != i)
+		return (handle_error(INVALID_SPRITE_ARG, FAIL));
 }
 
 void    read_image(t_string line, int index)
@@ -148,15 +153,22 @@ void    read_color(t_string line, int index, int space)
 {
 	t_string	*colors;
 	t_string	*tab;
+	int			i;
 
 	if (g_infos[index]++)
 		 return (handle_error(DUPLICATE_COLOR, FAIL));
-	//tab = ft_split(line, ' ');
-	colors = ft_split(line + 2, ',');
-	//tmp = ;
+	colors = ft_split(line + 1, ',');
+	//if (tablen((void**)colors) != 3)
+	//	return (handle_error(INVALID_COLORS, FAIL));
+	// i = -1;
+	// while(colors[++i])
+	// {
+	// 	colors[i] = trim(colors[i], " ");
+	// 	if (!isnumber(colors[i]))
+	// 		return (handle_error(INVALID_COLORS, FAIL));	
+	// }
+	validate_args(&colors, 3);
 	g_world.colors[space] = rgb_to_int(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
-	
-	//free_space(colors);
 }
 
 void    check_for_info(t_string line)
@@ -218,7 +230,7 @@ void	set_up_map(t_string file_name)
 	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
-		tmp = ft_strtrim(line, " \t");
+		tmp = trim(line, " \t");
 		if (*tmp == '1')
 		{
 			g_world.cols = ft_strlen(line) > g_world.cols ? ft_strlen(line) : g_world.cols;
@@ -248,7 +260,6 @@ void	allocate_map()
 		while (++j < g_world.cols)
 			g_game_map[i][j] = ' ';
 	}
-	printf("[%d | %d]\n", g_world.rows, g_world.cols);
 }
 
 void	get_player_pos(t_string line,int row)
@@ -280,8 +291,6 @@ void	get_player_pos(t_string line,int row)
 						g_world.player.rotation.angle = 0;
 				else
 					g_world.player.rotation.angle = 180;
-				//print_vector(PLAYERPOS);
-				//printf("[%d|%d]\n", col, row);
 			}
 		}
 		str++;
@@ -309,43 +318,39 @@ void    read_file(t_string file_name)
 	while (x > 0)
 	{
 		x = get_next_line(fd, &line);
-		tmp = ft_strtrim(line, " \t");
-		//printf("[%c]%s\n", tmp[0], line);
-		//if (*tmp == '1' && !is_info_full())
-		//	return (handle_error(MISSING_INFO, FAIL));
+		tmp = trim(line, " \t");
 		if (*tmp == '1')
 		{
 			size = ft_strlen(line);
 			get_player_pos(line, j);
-			i = 1;
+			i = 0;
 			while (++i < g_world.cols)
-			{
-				g_game_map[j][i] = i < size ? line[i] : ' ';
-				if (!ft_strchr("1 ", g_game_map[j][i]))
-				{
-					if (g_game_map[j][i + 1] == ' ' || g_game_map[j][i - 1] == ' ' || 
-	 					g_game_map[j + 1][i] == ' ' || g_game_map[j + 1][i] == ' ')
-					{
-						printf("%d|%d\n", i, j);
-						printf("%c | %c |%c |%c\n", g_game_map[j][i + 1], g_game_map[j + 1][i], g_game_map[j][i + 1], g_game_map[j + 1][i] == ' ');
-						return (handle_error(INVALID_MAP, FAIL));
-					}
-				}
-			}
-			printf("%s\n", g_game_map[j]);
+				g_game_map[j][i] = (i - 1) < size ? line[i - 1] : ' ';
+			//printf("%s\n", g_game_map[j]);
 			j++;
 		}
 		else
 			check_for_info(line);
 		free_space(&line);
 	}
-	
-	i = -1;
-	while (++i < g_world.rows)
+	fillCell(11, 9, 'C');
+	j = 0;
+	while (++j < g_world.rows)
 	{
-		j = -1;
-		while (++j < g_world.cols)
-			printf("%c", g_game_map[i][j]);
+		i = 0;
+		while (++i < g_world.cols)
+		{
+			if (!ft_strchr("1 ", g_game_map[j][i]))
+			{
+				if (g_game_map[j][i + 1] == ' ' || g_game_map[j][i - 1] == ' ' || 
+					g_game_map[j + 1][i] == ' ' || g_game_map[j - 1][i] == ' ')
+				{
+					//printf("%d|%d\n", i, j);
+					//printf("%c | %c |%c |%c\n", g_game_map[j][i + 1], g_game_map[j + 1][i], g_game_map[j][i - 1], g_game_map[j - 1][i]);
+					//return (handle_error(INVALID_MAP, FAIL));
+				}
+			}
+		}
 		printf("\n");
 	}
 	close(fd);

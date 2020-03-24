@@ -12,10 +12,10 @@
 
 #include "header.h"
 
-void		handle_error(int error_index, int status)
-{
-	t_string messages[14];
+t_string messages[16];
 
+void		init_errors()
+{
 	messages[0] = "Invalid file name!";
 	messages[1] = "Missing info";
 	messages[2] = "Duplicate Texture";
@@ -30,6 +30,12 @@ void		handle_error(int error_index, int status)
 	messages[11] = "INVALID_SPRITE_PLACEMENT";
 	messages[12] = "INVALID_RESOLUTION";
 	messages[13] = "DUPLICATION_PLAYER";
+	messages[14] = "INVALID SPRITE ARGUMENT";
+	messages[15] = "INVALID COLORS";
+}
+
+void		handle_error(int error_index, int status)
+{
 	perror(messages[error_index]);
 	free_all(status);
 }

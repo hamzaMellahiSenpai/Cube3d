@@ -87,7 +87,9 @@ enum							e_errors
 	INVALID_PATH,
 	INVALID_SPRITE_PLACEMENT,
 	INVALID_RESOLUTION,
-	DUPLICATE_PLAYER
+	DUPLICATE_PLAYER,
+	INVALID_SPRITE_ARG,
+	INVALID_COLORS
 };
 
 enum							e_space
@@ -312,6 +314,8 @@ char			**ft_split(char const *s, char c);
 int				numofdigits(int n);
 int				ft_strcmp(const char *s1, const char *s2);
 void			handle_error(int error_index, int status);
+void			init_errors();
+void validate_args(t_string **args, int nargs);
 void			read_file(t_string file_name);
 void			cube(t_vector a, int width, int color);
 float			dist(t_vector a, t_vector b);
@@ -341,6 +345,6 @@ void    free_all(int status);
 int		wall_at(t_vector coordinate);
 void		text(char *str, int x, int y, int color);
 int 	mouse(int x, int y);
-char	*ft_strtrim(char const *s1, char const *set);
+char	*trim(char const *s1, char const *set);
 /*=========================================================*/
 #endif
