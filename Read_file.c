@@ -143,10 +143,12 @@ void validate_args(t_string **args, int nargs)
 void    read_image(t_string line, int index)
 {
 	if (index <= 3)
+	{
+		g_infos[index]++;
 		load_texture(line, index);
+	}
 	else
 		load_sprite(line, index);
-	g_infos[index]++;
 }
 
 void    read_color(t_string line, int index, int space)

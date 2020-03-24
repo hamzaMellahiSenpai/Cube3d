@@ -65,7 +65,6 @@ enum							e_file_infos
 	south_texture,
 	east_texture,
 	west_texture,
-	sprite_texture,
 	resolution,
 	floor_color,
 	ceil_color,
