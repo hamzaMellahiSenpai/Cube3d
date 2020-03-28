@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sf_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 22:16:31 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/06 21:42:51 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/25 03:08:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 void	*sf_malloc(size_t size)
 {
 	void	*ptr;
-	t_lst	*lst;
 
 	if (!(ptr = malloc(size)))
 		(handle_error(Allocation_Failed, FAIL));
-	lst = new_lst(ptr);
+	new_lst(ptr);
 	return (ptr);
 }
 

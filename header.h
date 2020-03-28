@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 01:08:43 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/10 23:38:44 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/25 03:46:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # endif
 # include <math.h>
 # include <stdlib.h>
+#include <fcntl.h>
 //include "./valg/malloc.h"
 # include <string.h>
 # include "mlx.h"
@@ -27,6 +28,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
+# include "parsing_file/parsing_file.h"
 # define SWIDTH g_screen.width
 # define SHEIGHT g_screen.height
 # define VIEW_ANGLE (float)1.0472
@@ -65,6 +67,7 @@ enum							e_file_infos
 	south_texture,
 	east_texture,
 	west_texture,
+	sprite_texture,
 	resolution,
 	floor_color,
 	ceil_color,
@@ -311,11 +314,14 @@ void			*ft_memset(void *p, int val, size_t size);
 void			*ft_memcpy(void *dst, const void *src, size_t len);
 char			**ft_split(char const *s, char c);
 int				numofdigits(int n);
+int		ft_isdigit(char c);
+int		tablen(void **tab);
+int		isnumber(t_string str);
+char		*trim(char const *s, char const *set);
 int				ft_strcmp(const char *s1, const char *s2);
 void			handle_error(int error_index, int status);
 void			init_errors();
 void validate_args(t_string **args, int nargs);
-void			read_file(t_string file_name);
 void			cube(t_vector a, int width, int color);
 float			dist(t_vector a, t_vector b);
 int				rgb_to_int(int r, int g, int b);
@@ -346,4 +352,22 @@ void		text(char *str, int x, int y, int color);
 int 	mouse(int x, int y);
 char	*trim(char const *s1, char const *set);
 /*=========================================================*/
+void	load_image(int i, t_string path, int type);
+void	load_texture(t_string line, int index);
+void	load_sprite(t_string line, int index);
+void    read_color(t_string line, int index, int space);
+void    read_image(t_string line, int index);
+void    read_resolution(t_string line);
+void validate_args(t_string **args, int nargs);
+void    check_for_info(t_string line);
+int		is_info_full();
+void	fillCell(int x, int y, char type);
+void			read_file(t_string file_name);
+void	get_player_pos(t_string line,int row);
+void	get_rows_cols(t_string file_name);
+void	check_closed_map();
+void	allocate_map();
+void	fill_map(t_string file_name, t_string line);
+void	draw_cursor();
+void    draw_weapon();
 #endif

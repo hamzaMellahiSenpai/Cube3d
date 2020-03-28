@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:33:35 by hmellahi          #+#    #+#             */
-/*   Updated: 2020/03/08 08:56:37 by hmellahi         ###   ########.fr       */
+/*   Updated: 2020/03/25 04:25:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ int		object_at(t_vector coordinate)
 		return 0;
 	if (g_game_map[y][x] == 'C')
 	{
-		tpid = fork();
-		if (tpid == 0)
-			system("mpg123 -q assets/sounds/coin.mp3");
+		//tpid = fork();
+		//if (tpid == 0)
+		//	system("mpg123 -q assets/sounds/coin.mp3");
 		Destroy(x,y);
 	}
 	else if (g_game_map[y][x] == 'T')

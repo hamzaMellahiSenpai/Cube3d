@@ -88,36 +88,3 @@ char		*ft_strcpy(char *dest, const char *src)
 	dest[i] = 0;
 	return (dest + i);
 }
-
-char		*trim(char const *s, char const *set)
-{
-        int             debut;
-        int             fin;
-        int             i;
-        char    *p;
-
-        debut = -1;
-        if (!s)
-                return (NULL);
-        if (!set)
-                return (ft_strdup(s));
-        fin = ft_strlen(s);
-        while (s[++debut] && ft_strchr(set, s[debut]))
-                ;
-        while (debut < fin - 1)
-                if (!ft_strchr(set, s[fin - 1]))
-                        break ;
-                else
-                        fin--;
-        if (!(p = sf_malloc(fin - debut + 1)))
-                return (NULL);
-        i = -1;
-        while (++i < (fin - debut))
-                p[i] = s[debut + i];
-        p[i] = '\0';
-		/*if (index == 0)
-			free(&s);
-		else if (index == 1)
-			free(&set);*/
-        return (p);
-}
